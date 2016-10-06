@@ -1,4 +1,6 @@
+function test() {
 alert('yolo');
+}
 $('.ui.search')
   .search({
     source: content
