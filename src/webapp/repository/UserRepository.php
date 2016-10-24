@@ -63,7 +63,7 @@ class UserRepository
         $query  = sprintf(self::FIND_BY_NAME, $username);
         $result = $this->pdo->query($query, PDO::FETCH_ASSOC);
         $row = $result->fetch();
-        
+
         if ($row === false) {
             return false;
         }
@@ -78,10 +78,18 @@ class UserRepository
         );
     }
 
+    public function getIsAdmin($user)
+    {
+      $sql = "SELECT isadmin FROM users WHERE user=:user";
+      $statement = $this->pdo->prepare($sql);
+      $statement->execute(['user'=>$user]);
+      return $statement->fetchColumn();
+    }
+
     public function all()
     {
         $rows = $this->pdo->query(self::SELECT_ALL);
-        
+
         if ($rows === false) {
             return [];
             throw new \Exception('PDO error in all()');
