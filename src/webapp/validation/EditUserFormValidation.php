@@ -8,7 +8,7 @@ class EditUserFormValidation
     
     public function __construct($email, $phone, $company)
     {
-        $this->validate($email, $company);
+        $this->validate($email, $phone, $company);
     }
     
     public function isGoodToGo()
@@ -21,9 +21,10 @@ class EditUserFormValidation
         return $this->validationErrors;
     }
 
-    private function validate($email, $company)
+    private function validate($email, $phone, $company)
     {
         $this->validateEmail($email);
+        $this->validatePhone($phone);
         $this->validateCompany($company);
     }
     
@@ -31,6 +32,13 @@ class EditUserFormValidation
     {
         if (! filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $this->validationErrors[] = "Invalid email format on email";
+        }
+    }
+    
+    private function validatePhone($phone)
+    {
+        if (! is_numeric($phone) or $phone < 00000000 or $phone > 99999999) {
+            $this->validationErrors[] = 'Phoe must be between 00000000 and 99999999.';
         }
     }
 
