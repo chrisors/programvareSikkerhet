@@ -2,7 +2,7 @@
 error_reporting(0);
 ini_set('display_errors', 'off');
 
-if (! extension_loaded('openssl')) {
+if ( ! extension_loaded('openssl')) {
     die('You must enable the openssl extension.');
 }
 
