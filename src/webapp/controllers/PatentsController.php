@@ -69,9 +69,9 @@ class PatentsController extends Controller
             $this->app->redirect("/login");
         } else {
             $request     = $this->app->request;
-            $title       = htmlentities($request->post('title'));
-            $description = htmlentities($request->post('description'));
-            $company     = htmlentities($request->post('company'));
+            $title       = ($request->post('title'));
+            $description = ($request->post('description'));
+            $company     = ($request->post('company'));
             $date        = date("dmY");
             $file = $this -> startUpload();
 
@@ -84,7 +84,7 @@ class PatentsController extends Controller
                 $patent->setDate($date);
                 $patent->setFile($file);
                 $savedPatent = $this->patentRepository->save($patent);
-                $this->app->redirect(htmlspecialchars('/patents/' . $savedPatent . '?msg="Patent succesfully registered'));
+                $this->app->redirect('/patents/' . $savedPatent . '?msg="Patent succesfully registered');
             }
         }
 
