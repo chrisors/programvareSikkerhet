@@ -35,6 +35,7 @@ class PatentsController extends Controller
         $message = $request->get('msg');
         $variables = [];
 
+
         if($message) {
             $variables['msg'] = $message;
 
