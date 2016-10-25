@@ -23,8 +23,8 @@
                 {% else %}
         		<td> {{ patents.company|raw }} </td>
             <script>
-              content.push({title: "{{ patents.company|raw }}"});
-              content.push({title: "{{ patents.title|raw }}"});
+              content.push({title: "{{ patents.company|raw }}" + " (company)"});
+              content.push({title: "{{ patents.title|raw }}" + " (title)"});
             </script>
                 {% endif %}
         		<td> {{ patents.description|raw }}</td>
