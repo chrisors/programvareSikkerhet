@@ -69,9 +69,9 @@ class PatentsController extends Controller
             $this->app->redirect("/login");
         } else {
             $request     = $this->app->request;
-            $title       = ($request->post('title'));
-            $description = ($request->post('description'));
-            $company     = ($request->post('company'));
+            $title       = $request->post('title');
+            $description = $request->post('description');
+            $company     = $request->post('company');
             $date        = date("dmY");
             $file = $this -> startUpload();
 
