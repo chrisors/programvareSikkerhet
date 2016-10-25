@@ -1,6 +1,6 @@
 window.onload = function() {
     // Setup search
-    var content = [
+/*    var content = [
         { title: 'Andorra' },
         { title: 'United Arab Emirates' },
         { title: 'Afghanistan' },
@@ -8,8 +8,8 @@ window.onload = function() {
         { title: 'Anguilla' },
         { title: 'Albania' },
         { title: 'Armenia' }
-    ];
-//    var patents = {% for patents in patent %}
+    ]; */
+
     $('.ui.search')
         .search({
             type: 'standard',

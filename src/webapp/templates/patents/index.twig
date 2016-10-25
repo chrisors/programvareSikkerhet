@@ -2,7 +2,9 @@
 
 {% block content %}
     <h2>Patents</h2>
-
+    <script>
+      var content = [];
+    </script>
     <table class="ui single line table">
         <thead>
             <tr>
@@ -20,6 +22,10 @@
                     <td><a href="/users/{{ patents.company|raw }}">{{ patents.company|raw }}</a></td>
                 {% else %}
         		<td> {{ patents.company|raw }} </td>
+            <script>
+              content.push({title: "{{ patents.company|raw }}"});
+              content.push({title: "{{ patents.title|raw }}"});
+            </script>
                 {% endif %}
         		<td> {{ patents.description|raw }}</td>
         	</tr>
