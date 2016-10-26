@@ -66,10 +66,10 @@ class UsersController extends Controller
 
         $validation = new RegistrationFormValidation($username, $password, $firstName, $lastName, $phone, $company);
 
-        if(!$this->token->validate($token)){
-          $this->app->flashNow('info', 'An error has occured');
-          return $this->render('users/edit.twig', ['user' => $user]);
-        }
+//        if(!$this->token->validate($token)){
+//          $this->app->flashNow('info', 'An error has occured');
+//          return $this->render('users/new.twig', ['username' => $username]);
+//        }
 
         if ($validation->isGoodToGo()) {
             $password = $password;
