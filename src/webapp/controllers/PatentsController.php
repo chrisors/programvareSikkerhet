@@ -74,10 +74,10 @@ class PatentsController extends Controller
             $description = $request->post('description');
             $company     = $request->post('company');
             $date        = date("dmY");
-            $file = $this -> startUpload();
 
-            $validation = new PatentValidation($title, $company, $description);
+            $validation = new PatentValidation($company, $title);
             if ($validation->isGoodToGo()) {
+                $file = $this -> startUpload();
                 $patent = new Patent($company, $title, $description, $date, $file);
                 $patent->setCompany($company);
                 $patent->setTitle($title);
@@ -87,10 +87,12 @@ class PatentsController extends Controller
                 $savedPatent = $this->patentRepository->save($patent);
                 $this->app->redirect('/patents/' . $savedPatent . '?msg="Patent succesfully registered');
             }
+
+              $this->app->flashNow('error', join('<br>', $validation->getValidationErrors()));
+              $this->app->render('patents/new.twig');
+
         }
 
-            $this->app->flashNow('error', join('<br>', $validation->getValidationErrors()));
-            $this->app->render('patents/new.twig');
     }
 
     public function startUpload()
