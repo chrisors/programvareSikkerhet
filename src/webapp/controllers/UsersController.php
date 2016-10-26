@@ -99,7 +99,7 @@ class UsersController extends Controller
         $firstName  = $request->post('first_name');
         $lastName  = $request->post('last_name');
         $phone    = $request->post('phone');
-        $company   = $request->post('company');
+        $company   = ($request->post('company'));
 
         $validation = new EditUserFormValidation($email, $phone, $company);
 

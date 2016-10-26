@@ -9,13 +9,13 @@
         </div>
 
         <div class="field">
-            <label>Title</label>
-            <input type = "text" name="title">
+            <label>Title (Must be between 3 and 25 characters)</label>
+            <input type = "text" name="title" pattern=".{3,25}">
         </div>
 
         <div class="field">
-            <label>Company/User</label>
-            <input type="text" name="company">
+            <label>Company/User (Must be between 3 and 25 characters)</label>
+            <input type="text" name="company" pattern=".{3,25}">
         </div>
 
         <div class="field">
@@ -24,8 +24,8 @@
         </div>
 
         <div class="field">
-            <label>Description</label>
-            <textarea cols="40" rows="10" name="description"> </textarea>
+            <label>Description (Maximum of 250 characters)</label>
+            <textarea cols="40" rows="10" maxlength="250" name="description"> </textarea>
         </div>
 
         <input type="submit" name="submit" value="Register patent" class="positive ui button">
