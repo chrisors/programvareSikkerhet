@@ -34,7 +34,7 @@ class PatentValidation {
 
         }
 
-        if(empty($description) && (!preg_match('/^[A-Za-z0-9_]+$/',$description))) {
+        if(empty($description)) {
             $this->validationErrors[] = "Description needed, can only contain letters and numbers";
         }
     }
