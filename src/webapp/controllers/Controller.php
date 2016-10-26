@@ -31,7 +31,6 @@ class Controller
             $variables['loggedInUsername'] = $_SESSION['user'];
         }
         $variables['token'] = $this->token->getToken();
-
         print $this->app->render($template, $variables);
     }
 }

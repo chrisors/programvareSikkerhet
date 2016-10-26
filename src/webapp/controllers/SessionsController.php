@@ -30,8 +30,12 @@ class SessionsController extends Controller
         $user    = $request->post('user');
         $pass    = $request->post('pass');
         $token   = $request->post('token');
+        $bad_login_limit = 4;
+        $lockout_time = 600;
+        $failed_logins = 0;
 
         if ($this->auth->checkCredentials($user, $pass) && $this->token->validate($token)) {
+        //both username/password and token must match
             $_SESSION['user'] = $user;
 /*            setcookie("user", $user);
             setcookie("password",  $pass);
@@ -48,7 +52,23 @@ class SessionsController extends Controller
             return;
         }
 
-        $this->app->flashNow('error', 'Incorrect user/pass combination.');
+        if(($failed_logins >= $bad_login_limit) && (time() - $first_failed_login < $lockout_time)) {
+            $this->app->flashNow('error', "You are currently locked out for 10min");
+        } else {
+          if( time() - $first_failed_login > $lockout_time ) {
+            // first unsuccessful login since $lockout_time on the last one expired
+            $first_failed_login = time(); // commit to DB
+            $failed_logins = 1; // commit to db
+            $this->userRepository->updateLoginAttempts($failed_logins, $first_failed_login, $user);
+            $this->app->flashNow('error', "Incorrect user/pass combination. $user $first_failed_login $user1");
+          } else {
+            $failed_logins++; // commit to db.
+          }
+        }
+//        $failed_logins = 1;
+//        $first_failed_login = 3;
+//        $this->userRepository->updateLoginAttempts($failed_logins, $first_failed_login, $user);
+//        $this->app->flashNow('error', "Incorrect user/pass combination. $user");
         $this->render('sessions/new.twig', []);
     }
 
