@@ -3,11 +3,19 @@
 {% block content %}
     <h2>Register patent</h2>
 
-    <form action="#" method="post" enctype="multipart/form-data" class="ui form">
+    {% if flash.error %}
         <div class="ui error message">
-            {{ flash.error }}
+            {{ flash.error|raw }}
         </div>
+    {% endif %}
 
+    {% if flash.info %}
+        <div class="ui warning message">
+            {{ flash.info }}
+        </div>
+    {% endif %}
+
+    <form action="" method="post" enctype="multipart/form-data" class="ui form">
         <div class="field">
             <label>Title (Must be between 3 and 25 characters)</label>
             <input type = "text" name="title" pattern=".{3,25}">
@@ -25,7 +33,7 @@
 
         <div class="field">
             <label>Description (Maximum of 250 characters)</label>
-            <textarea cols="40" rows="10" maxlength="250" name="description"> </textarea>
+            <textarea cols="40" rows="10" pattern=".{3,25}" name="description"> </textarea>
         </div>
 
         <input type="submit" name="submit" value="Register patent" class="positive ui button">
