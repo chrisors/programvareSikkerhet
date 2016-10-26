@@ -106,7 +106,6 @@ class UsersController extends Controller
         $lastName   = $request->post('last_name');
         $phone      = $request->post('phone');
         $company    = $request->post('company');
-
         $token      = $request->post('token');
 
         if(!$this->token->validate($token)){
