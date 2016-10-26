@@ -14,7 +14,7 @@ class PatentValidation {
 
     public function isGoodToGo()
     {
-        return \count($this->validationErrors) ===0;
+        return empty($this->validationErrors);
     }
 
     public function getValidationErrors()
@@ -22,13 +22,13 @@ class PatentValidation {
     return $this->validationErrors;
     }
 
-    public function validate($company, $title)
+    private function validate($company, $title)
     {
-        if ($company == null) {
+        if (empty($company)) {
             $this->validationErrors[] = "Company/User needed";
 
         }
-        if ($title == null) {
+        if (empty($title)) {
             $this->validationErrors[] = "Title needed";
         }
 
