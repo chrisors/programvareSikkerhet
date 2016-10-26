@@ -66,10 +66,11 @@ class UsersController extends Controller
 
         $validation = new RegistrationFormValidation($username, $password, $firstName, $lastName, $phone, $company);
 
-//        if(!$this->token->validate($token)){
-//          $this->app->flashNow('info', 'An error has occured');
-//          return $this->render('users/new.twig', ['username' => $username]);
-//        }
+    //    if(!$this->token->validate($token)){
+    //      $this->app->flashNow('info', 'An error has occurred');
+    //      $this->render('users/new.twig', ['username' => $username]);
+    //      return;
+    //    }
 
         if ($validation->isGoodToGo()) {
             $password = $password;
@@ -131,18 +132,6 @@ class UsersController extends Controller
         $this->render('users/edit.twig', ['user' => $user]);
     }
 
-    public function destroy($username)
-    {
-        if ($this->userRepository->deleteByUsername($username) === 1) {
-            $this->app->flash('info', "Sucessfully deleted '$username'");
-            $this->app->redirect('/admin');
-            return;
-        }
-
-        $this->app->flash('info', "An error ocurred. Unable to delete user '$username'.");
-        $this->app->redirect('/admin');
-    }
-
     public function makeSureUserIsAuthenticated()
     {
         if ($this->auth->guest()) {
@@ -150,4 +139,17 @@ class UsersController extends Controller
             $this->app->redirect('/login');
         }
     }
+
+    public function all()
+    {
+        $this->render('users.twig', [
+          'users' => $this->userRepository->all()
+        ]);
+    }
+
+    //public function destroy()
+    //{
+    //    $this->auth->logout();
+    //    $this->app->redirect('/');
+    //}
 }

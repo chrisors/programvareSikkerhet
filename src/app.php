@@ -56,15 +56,15 @@ $app->get('/aboutus', $ns . 'PagesController:aboutUs');
 $app->get('/login', $ns . 'SessionsController:newSession');
 $app->post('/login', $ns . 'SessionsController:create');
 
+// Logout
 $app->get('/logout', $ns . 'SessionsController:destroy')->name('logout');
 
 // User management
 $app->get('/users/new', $ns . 'UsersController:newuser')->name('newuser');
 $app->post('/users/new', $ns . 'UsersController:create');
 
+//Show user
 $app->get('/users/:username', $ns . 'UsersController:show')->name('showuser');
-
-$app->get('/users/:username/delete', $ns . 'UsersController:destroy');
 
 // Administer own profile
 $app->get('/profile/edit', $ns . 'UsersController:edit')->name('editprofile');
@@ -72,15 +72,13 @@ $app->post('/profile/edit', $ns . 'UsersController:update');
 
 // Patents
 $app->get('/patents', $ns . 'PatentsController:index')->name('showpatents');
-
 $app->get('/patents/new', $ns . 'PatentsController:newpatent')->name('registerpatent');
 $app->post('/patents/new', $ns . 'PatentsController:create');
-
 $app->get('/patents/:patentId', $ns . 'PatentsController:show');
-
-$app->get('/patents/:patentId/delete', $ns . 'PatentsController:destroy');
 
 // Admin restricted area
 $app->get('/admin', $ns . 'AdminController:index')->name('admin');
+$app->get('/patents/:patentId/delete', $ns . 'AdminController:destroypatent');
+$app->get('/users/users/:username/delete', $ns . 'AdminController:destroyuser');
 
 return $app;

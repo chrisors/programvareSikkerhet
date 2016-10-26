@@ -14,7 +14,6 @@ class PatentsController extends Controller
         parent::__construct();
     }
 
-
     public function index()
     {
         $patent = $this->patentRepository->all();
@@ -101,17 +100,5 @@ class PatentsController extends Controller
                 return $targetFile;
             }
         }
-    }
-
-    public function destroy($patentId)
-    {
-        if ($this->patentRepository->deleteByPatentid($patentId) === 1) {
-            $this->app->flash('info', "Sucessfully deleted '$patentId'");
-            $this->app->redirect('/admin');
-            return;
-        }
-
-        $this->app->flash('info', "An error ocurred. Unable to delete user '$username'.");
-        $this->app->redirect('/admin');
     }
 }
