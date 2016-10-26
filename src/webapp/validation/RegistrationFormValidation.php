@@ -27,7 +27,7 @@ class RegistrationFormValidation
 
     private function validate($username, $password, $first_name, $last_name, $phone, $company)
     {
-        if (!preg_match('/^(?=.*?[A-Z])(?=(.*[a-z]){1,})(?=(.*[\d]){1,})(?=(.*[\W]){1,})(?!.*\s).{8,25}$/', $password)) {
+        if(!preg_match('/^(?=.*?[A-Z])(?=(.*[a-z]){1,})(?=(.*[\d]){1,})(?=(.*[\W]){1,})(?!.*\s).{8,25}$/', $password)) {
             $this->validationErrors[] = 'Wrong password combination';
         }
 
@@ -55,7 +55,7 @@ class RegistrationFormValidation
             $this->validationErrors[] = "Company name can only contain letters and numbers";
         }
 
-        if (!preg_match('/^[A-Za-z0-9_]+$/',$username)) {
+        if(!preg_match('/^[A-Za-z0-9_]+$/',$username)) {
             $this->validationErrors[] = 'Username can only contain letters and numbers';
         }
     }

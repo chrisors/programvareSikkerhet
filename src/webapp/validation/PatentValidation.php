@@ -8,8 +8,9 @@ class PatentValidation {
 
     private $validationErrors = [];
 
-    public function __construct($company, $title) {
-        return $this->validate($company, $title);
+    public function __construct($company, $title, $description)
+    {
+        return $this->validate($company, $title, $description);
     }
 
     public function isGoodToGo()
@@ -19,21 +20,22 @@ class PatentValidation {
 
     public function getValidationErrors()
     {
-    return $this->validationErrors;
-    }
-
-    private function validate($company, $title)
-    {
-        if (empty($company)) {
-            $this->validationErrors[] = "Company/User needed";
-
-        }
-        if (empty($title)) {
-            $this->validationErrors[] = "Title needed";
-        }
-
         return $this->validationErrors;
     }
 
+    private function validate($company, $title, $description)
+    {
+        if(empty($title)) {
+            $this->validationErrors[] = "Title needed";
+        }
 
+        if(empty($company)) {
+            $this->validationErrors[] = "Company/User needed";
+
+        }
+
+        //if(empty($description) && (!preg_match('/^[A-Za-z0-9_]+$/',$description))) {
+          //  $this->validationErrors[] = "Description needed, can only contain letters and numbers";
+        //}
+    }
 }
