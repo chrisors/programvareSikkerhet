@@ -71,20 +71,15 @@ class PatentsController extends Controller
         } else {
             $request     = $this->app->request;
             $title       = $request->post('title');
-            $description = $request->post('description');
             $company     = $request->post('company');
+            $description = $request->post('description');
             $date        = date("dmY");
             $file = $this -> startUpload();
 
-            $validation = new PatentValidation($title, $company, $description);
-            
+            $validation = new PatentValidation($title, $company, $file, $description);
+
             if ($validation->isGoodToGo()) {
                 $patent = new Patent($company, $title, $description, $date, $file);
-                $patent->setCompany($company);
-                $patent->setTitle($title);
-                $patent->setDescription($description);
-                $patent->setDate($date);
-                $patent->setFile($file);
                 $savedPatent = $this->patentRepository->save($patent);
                 $this->app->redirect('/patents/' . $savedPatent . '?msg="Patent succesfully registered');
             }
