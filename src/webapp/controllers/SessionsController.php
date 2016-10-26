@@ -29,10 +29,11 @@ class SessionsController extends Controller
         $request = $this->app->request;
         $user    = $request->post('user');
         $pass    = $request->post('pass');
+        $token   = $request->post('token');
 
-        if ($this->auth->checkCredentials($user, $pass)) {
+        if ($this->auth->checkCredentials($user, $pass) && $this->token->validate($token)) {
             $_SESSION['user'] = $user;
-            setcookie("user", $user);
+/*            setcookie("user", $user);
             setcookie("password",  $pass);
             $isAdmin = $this->auth->user()->isAdmin();
 
@@ -41,7 +42,7 @@ class SessionsController extends Controller
             } else {
                 setcookie("isadmin", "no");
             }
-
+*/
             $this->app->flash('info', "You are now successfully logged in as $user.");
             $this->app->redirect('/');
             return;
@@ -54,7 +55,7 @@ class SessionsController extends Controller
     public function destroy()
     {
         $this->auth->logout();
-        $this->app->flash('info', "Successfully logged out.");
         $this->app->redirect('/');
+//        $this->app->redirect('http://www.ntnu.no/');
     }
 }
