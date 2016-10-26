@@ -77,6 +77,7 @@ class PatentsController extends Controller
             $file = $this -> startUpload();
 
             $validation = new PatentValidation($title, $company, $description);
+            
             if ($validation->isGoodToGo()) {
                 $patent = new Patent($company, $title, $description, $date, $file);
                 $patent->setCompany($company);
@@ -89,7 +90,8 @@ class PatentsController extends Controller
             }
         }
 
-            $this->app->flashNow('error', join('<br>', $validation->getValidationErrors()));
+            $errors = join("<br>\n", $validation->getValidationErrors());
+            $this->app->flashNow('error', $errors);
             $this->app->render('patents/new.twig');
     }
 
