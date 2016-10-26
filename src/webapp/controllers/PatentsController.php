@@ -76,38 +76,46 @@ class PatentsController extends Controller
             $date        = date("dmY");
 
 
-            $validation = new PatentValidation($company, $title);
-            if ($validation->isGoodToGo()) {
-                $file = $this -> startUpload();
+  $validation = new PatentValidation($company, $title, $description);
+          if ($validation->isGoodToGo()) {
+
+            if(isset($_POST['submit']))
+            {
+              $target_dir =  getcwd()."/web/uploads/";
+              $targetFile = $target_dir . basename($_FILES['uploaded']['name']);
+              $ext = pathinfo($targetFile, PATHINFO_EXTENSION);
+            if ($ext === 'pdf') {
+
+              if(move_uploaded_file($_FILES['uploaded']['tmp_name'], $targetFile))
+              {
                 $patent = new Patent($company, $title, $description, $date, $file);
-                $patent->setCompany($company);
-                $patent->setTitle($title);
-                $patent->setDescription($description);
-                $patent->setDate($date);
-                $patent->setFile($file);
                 $savedPatent = $this->patentRepository->save($patent);
                 $this->app->redirect('/patents/' . $savedPatent . '?msg="Patent succesfully registered');
-            }
-
-              $this->app->flashNow('error', join('<br>', $validation->getValidationErrors()));
-              $this->app->render('patents/new.twig');
-
-        }
-
-    }
-
-    public function startUpload()
-    {
-        if(isset($_POST['submit']))
-        {
-            $target_dir =  getcwd()."/web/uploads/";
-            $targetFile = $target_dir . basename($_FILES['uploaded']['name']);
-            if(move_uploaded_file($_FILES['uploaded']['tmp_name'], $targetFile))
-            {
                 return $targetFile;
+
+              }
+
+              }
+
+
+            }
+
+            $this->app->flashNow('error', 'Please upload correct file in pdf format');
+            $this->app->render('patents/new.twig');
+
+            }
+else {
+  # code...
+
+            $this->app->flashNow('error', join('<br>', $validation->getValidationErrors()));
+            $this->app->render('patents/new.twig');
             }
         }
+
     }
+
+
+
 
     public function destroy($patentId)
     {
