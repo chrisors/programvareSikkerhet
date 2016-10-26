@@ -11,19 +11,19 @@
 
     {% if flash.info %}
         <div class="ui warning message">
-            {{ flash.info|raw }}
+            {{ flash.info }}
         </div>
     {% endif %}
 
     <form action="" method="post" class="ui form">
         <div class="field">
-            <label>Username*</label>
-            <input type="text" name="user" value="{{ username }}">
+            <label>Username* (Must be between 3 and 25 characters)</label>
+            <input type="text" name="user" value="{{ username }}" pattern=".{3,25}">
         </div>
 
         <div class="field">
-            <label>Password*</label>
-            <input type="text" name="pass">
+            <label>Password* (Must be between 8 and 25 characters. Lower and uppercase letters, one number and one special characters)</label>
+            <input type="password" name="pass" pattern=".{8,25}">
         </div>
 
         <div class="field">
@@ -42,8 +42,8 @@
         </div>
 
         <div class="field">
-            <label>Company</label>
-            <input type="text" name="company">
+            <label>Company (Must be between 3 and 25 characters)</label>
+            <input type="text" name="company" pattern=".{3,25}">
         </div>
 
         <input type="submit" name="submit" value="Create new user" class="positive ui button">

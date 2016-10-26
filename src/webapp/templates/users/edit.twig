@@ -3,11 +3,19 @@
 {% block content %}
     <h2>Edit profile</h2>
 
-    <form action="" method="post" class="ui form">
-        <div class="ui error message">
-            {{ flash.error }}
-        </div>
+        {% if flash.error %}
+            <div class="ui error message">
+                {{ flash.error|raw }}
+            </div>
+        {% endif %}
 
+        {% if flash.info %}
+            <div class="ui warning message">
+                {{ flash.info }}
+            </div>
+        {% endif %}
+
+    <form action="" method="post" class="ui form">
         <div class="field">
             <label>First name</label>
             <input type = "text" name="first_name" value= "{{ user.firstName }}">
@@ -19,18 +27,18 @@
         </div>
 
         <div class="field">
-            <label>Phone</label>
+            <label>Phone (Only eight digits please)</label>
             <input type = "text" name="phone"  value= "{{ user.phone }}">
         </div>
 
         <div class="field">
-            <label>Email</label>
-            <input type="text" name="email" value="{{ user.email|raw}}">
+            <label>Email (Valid email address)</label>
+            <input type="text" name="email" value="{{ user.email }}">
         </div>
 
         <div class="field">
-            <label>Company</label>
-            <input type="text" name="company" value="{{ user.company|raw }}">
+            <label>Company (Must be between 3 and 25 characters)</label>
+            <input type="text" name="company" value="{{ user.company }}" pattern=".{3,25}">
         </div>
 
         <input type="submit" name="submit" value="Save profile" class="positive ui button">
