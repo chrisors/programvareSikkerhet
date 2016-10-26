@@ -37,16 +37,16 @@ class EditUserFormValidation
 
     private function validatePhone($phone)
     {
-        if (! is_numeric($phone) or $phone < 00000000 or $phone > 99999999) {
-            $this->validationErrors[] = 'Phone must be between 00000000 and 99999999.';
+        if (!is_numeric($phone) or strlen($phone) !="8") {
+            $this->validationErrors[] = 'Phone must be eight digits';
         }
     }
 
     private function validateCompany($company)
     {
-        if(strlen($company) > 0 && (!preg_match('/[^0-9]/',$company)))
-        {
-            $this->validationErrors[] = 'Company can only contain letters';
-        }
+      if(empty($company) or !preg_match('/^[A-Za-z0-9_]+$/',$company)) {
+          $this->validationErrors[] = "Please write in company name";
+      }
+
     }
 }

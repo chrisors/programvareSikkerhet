@@ -4,6 +4,7 @@ use Slim\Slim;
 use Slim\Views\Twig;
 use Slim\Views\TwigExtension;
 use tdt4237\webapp\Auth;
+use tdt4237\webapp\Token;
 use tdt4237\webapp\Hash;
 use tdt4237\webapp\repository\UserRepository;
 use tdt4237\webapp\repository\PatentRepository;
@@ -43,6 +44,7 @@ $app->hash = new Hash();
 $app->userRepository = new UserRepository($app->db);
 $app->patentRepository = new PatentRepository($app->db);
 $app->auth = new Auth($app->userRepository, $app->hash);
+$app->token = new Token();
 
 $ns ='tdt4237\\webapp\\controllers\\';
 

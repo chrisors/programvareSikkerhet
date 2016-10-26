@@ -8,9 +8,9 @@ class PatentValidation {
 
     private $validationErrors = [];
 
-    public function __construct($title, $company, $description)
+    public function __construct($title, $company, $file, $description)
     {
-        return $this->validate($title, $company, $description);
+        return $this->validate($title, $company, $file, $description);
     }
 
     public function isGoodToGo()
@@ -23,8 +23,12 @@ class PatentValidation {
         return $this->validationErrors;
     }
 
-    private function validate($title, $company, $description)
+    private function validate($title, $company, $file, $description)
     {
+        if(!isset($description) || trim($description) == "") {
+            $this->validationErrors[] = "Description needed, can only contain letters and numbers";
+        }
+
         if(empty($title)) {
             $this->validationErrors[] = "Title needed";
         }
@@ -34,8 +38,9 @@ class PatentValidation {
 
         }
 
-        if(empty($description) && (!preg_match('/^[A-Za-z0-9_]+$/',$description))) {
-            $this->validationErrors[] = "Description needed, can only contain letters and numbers";
-        }
+        //if(empty($file)) {
+          //  $this->validationErrors[] = "Please upload correct file in pdf format";
+        //}
+        return $this->validationErrors;
     }
 }
