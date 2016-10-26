@@ -16,6 +16,12 @@ class PatentsController extends Controller
 
     public function index()
     {
+
+      if ($this->auth->guest()) {
+          $this->app->flash("info", "You must be logged in to see all patents");
+          $this->app->redirect("/login");
+      }
+
         $patent = $this->patentRepository->all();
         if($patent != null)
         {

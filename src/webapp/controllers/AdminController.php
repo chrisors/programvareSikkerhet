@@ -64,5 +64,4 @@ class AdminController extends Controller
         $this->app->flash('info', "An error occurred. Unable to delete user '$username'.");
         $this->app->redirect('/admin');
     }
-
 }
