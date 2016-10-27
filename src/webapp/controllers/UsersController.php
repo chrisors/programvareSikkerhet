@@ -149,10 +149,12 @@ class UsersController extends Controller
 
     public function destroy()
     {
-    //    if (strcmp($token, $_SESSION['token']) !==0) {
-    //        $this->app->flash('info', "An error occurred");
-    //        return;
-    //    }
+    /*    if (strcmp($token, $_SESSION['token']) !==0) {
+            $this->app->flash('info', "An error occurred");
+            return;
+        }
+    */
+
       $this->auth->logout();
       $this->app->redirect('/');
     }
