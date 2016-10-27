@@ -29,6 +29,7 @@ class Sql
         self::insertPatents();
     }
 
+
     static function insertDummyUsers()
     {
         $hash1 = Hash::make(bin2hex(openssl_random_pseudo_bytes(2)));
