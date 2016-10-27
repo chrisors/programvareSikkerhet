@@ -14,8 +14,10 @@ class User
     protected $company = null;
     protected $email   = null;
     protected $isAdmin = 0;
+    protected $failed_logins = 0;
+    protected $first_failed_login = 0;
 
-    function __construct($username, $hash, $firstName, $lastName, $phone, $company)
+    function __construct($username, $hash, $firstName, $lastName, $phone, $company, $failed_logins, $first_failed_login)
     {
         $this->username = $username;
         $this->hash = $hash;
@@ -23,6 +25,8 @@ class User
         $this->lastName = $lastName;
         $this->phone = $phone;
         $this->company = $company;
+        $this->failed_logins = $failed_logins;
+        $this->first_failed_login = $first_failed_login;
     }
 
     public function getUserId()
@@ -114,5 +118,21 @@ class User
         $this->isAdmin = $isAdmin;
         return $this;
     }
+
+    public function getFailed_logins() {
+       return $this->failed_logins;
+   }
+
+   public function setFailed_logins($failed_logins) {
+       $this->failed_logins = $failed_logins;
+   }
+
+   public function getFirst_failed_login() {
+      return $this->first_failed_login;
+  }
+
+  public function setFirst_failed_login($first_failed_login) {
+      $this->first_failed_login = $first_failed_login;
+  }
 
 }

@@ -14,9 +14,14 @@ class PatentsController extends Controller
         parent::__construct();
     }
 
-
     public function index()
     {
+
+      if ($this->auth->guest()) {
+          $this->app->flash("info", "You must be logged in to see all patents");
+          $this->app->redirect("/login");
+      }
+
         $patent = $this->patentRepository->all();
         if($patent != null)
         {
@@ -119,6 +124,7 @@ class PatentsController extends Controller
 
         }
 
+
     }
   }
 
@@ -136,4 +142,5 @@ class PatentsController extends Controller
         $this->app->flash('info', "An error ocurred. Unable to delete user '$username'.");
         $this->app->redirect('/admin');
     }
+
 }
