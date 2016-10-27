@@ -136,4 +136,20 @@ class UserRepository
       return $this->pdo->exec($query);
     }
 
+    public function readLoginAttempts($user)
+    {
+      $sql = "SELECT failed_logins FROM users WHERE user=:user";
+      $statement = $this->pdo->prepare($sql);
+      $statement->execute(['user'=>$user]);
+      return $statement->fetchColumn();
+    }
+
+    public function readFirstFailedLogin($user)
+    {
+      $sql = "SELECT first_failed_login FROM users WHERE user=:user";
+      $statement = $this->pdo->prepare($sql);
+      $statement->execute(['user'=>$user]);
+      return $statement->fetchColumn();
+    }
+
 }
