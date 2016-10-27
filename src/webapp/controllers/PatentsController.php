@@ -28,9 +28,26 @@ class PatentsController extends Controller
             $patent->sortByDate();
         }
         $users = $this->userRepository->all();
-
         $this->render('patents/index.twig', ['patent' => $patent, 'users' => $users]);
     }
+
+/*    public function search()
+    {
+      $request = $this->app->request;
+      $patentSearch = $request->post('patentsSearch'); //this work
+      $patent = $this->patentRepository->all();
+      $users = $this->userRepository->all();
+  //          $searchQuery = $this->patentRepository->searchPatents($patentSearch);
+//      echo "$patentSearch";
+
+//            echo "$searchQuery";
+
+      $this->render('patents/index.twig', [
+//          'patentsSearch' => $searchQuery,
+          'patent' => $patent,
+          'users' => $users
+      ]);
+    }*/
 
     public function show($patentId)
     {
@@ -40,11 +57,6 @@ class PatentsController extends Controller
         $request = $this->app->request;
         $message = $request->get('msg');
         $variables = [];
-/*
-        $request = $this->app->request;
-        $searchword    = $request->post('patents');
-        $search = $his->patentRepository->searchPatents($searchword);
-*/
 
         if($message) {
             $variables['msg'] = $message;
@@ -54,8 +66,7 @@ class PatentsController extends Controller
         $this->render('patents/show.twig', [
             'patent' => $patent,
             'user' => $user,
-            'flash' => $variables,
-            'search' => $search
+            'flash' => $variables
         ]);
 
     }
@@ -93,7 +104,7 @@ class PatentsController extends Controller
             if(isset($_POST['submit']))
             {
               $target_dir =  getcwd()."/web/uploads/";
-              $targetFile = $target_dir . basename($_FILES['uploaded']['name']);
+              $tarsearchPatentsgetFile = $target_dir . basename($_FILES['uploaded']['name']);
               $ext = pathinfo($targetFile, PATHINFO_EXTENSION);
             if ($ext === 'pdf' || empty($_FILES['uploaded']['name'])) {
 
