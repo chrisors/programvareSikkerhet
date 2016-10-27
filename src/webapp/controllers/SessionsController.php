@@ -74,11 +74,4 @@ class SessionsController extends Controller
         }
         $this->render('sessions/new.twig', []);
     }
-
-    //public function destroy()
-    // {
-      //  $this->auth->logout();
-      //  $this->app->redirect('/');
-//       $this->app->redirect('http://www.ntnu.no/');
-    //}
 }
