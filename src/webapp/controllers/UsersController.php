@@ -66,18 +66,13 @@ class UsersController extends Controller
 
         $validation = new RegistrationFormValidation($username, $password, $firstName, $lastName, $phone, $company);
 
-    /*    if(!$this->token->validate($token)){
-          $this->app->flashNow('info', 'An error has occurred');
-          $this->render('users/new.twig', ['username' => $username]);
-          return;
-        }
-    */
         if ($validation->isGoodToGo()) {
             $password = $password;
             $password = $this->hash->make($password);
             $user = new User($username, $password, $firstName, $lastName, $phone, $company);
             $this->userRepository->save($user);
 
+            session_regenerate_id();
             $this->app->flash('info', 'Thanks for creating a user. Now log in.');
             return $this->app->redirect('/login');
         }
@@ -110,7 +105,7 @@ class UsersController extends Controller
         $token      = $request->post('token');
 
         if(!$this->token->validate($token)){
-          $this->app->flashNow('info', 'An error has occured');
+          $this->app->flashNow('info', 'An error has occurred');
           return $this->render('users/edit.twig', ['user' => $user]);
         }
 

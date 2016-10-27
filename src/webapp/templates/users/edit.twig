@@ -37,8 +37,8 @@
         </div>
 
         <div class="field">
-            <label>Company (Must be between 3 and 25 characters)</label>
-            <input type="text" name="company" value="{{ user.company }}" pattern=".{3,25}">
+            <label>Company (Must be between 3 and 50 characters)</label>
+            <input type="text" name="company" value="{{ user.company }}" pattern=".{3,50}">
         </div>
 
         <input type="hidden" name="token" value="{{ token }}">
