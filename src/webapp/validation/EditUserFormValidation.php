@@ -44,7 +44,7 @@ class EditUserFormValidation
 
     private function validateCompany($company)
     {
-      if(empty($company) or strlen($company) > 10000) {
+      if(empty($company) or strlen($company) > 50) {
           $this->validationErrors[] = "Please write in company name";
       }
 
