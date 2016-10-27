@@ -154,7 +154,7 @@ class UsersController extends Controller
             return;
         }
     */
-
+      session_regenerate_id();
       $this->auth->logout();
       $this->app->redirect('/');
     }
