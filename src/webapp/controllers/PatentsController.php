@@ -84,7 +84,7 @@ class PatentsController extends Controller
               $target_dir =  getcwd()."/web/uploads/";
               $targetFile = $target_dir . basename($_FILES['uploaded']['name']);
               $ext = pathinfo($targetFile, PATHINFO_EXTENSION);
-            if ($ext === 'pdf') {
+            if ($ext === 'pdf' || empty($_FILES['uploaded']['name'])) {
 
               if(move_uploaded_file($_FILES['uploaded']['tmp_name'], $targetFile))
               {
@@ -94,25 +94,33 @@ class PatentsController extends Controller
                 return $targetFile;
 
               }
+              $patent = new Patent($company, $title, $description, $date, $file);
+              $savedPatent = $this->patentRepository->save($patent);
+              $this->app->redirect('/patents/' . $savedPatent . '?msg="Patent succesfully registered');
 
               }
 
+              else {
+                $this->app->flashNow('error', 'PDF files only');
+                $this->app->render('patents/new.twig');
+              }
+
+
 
             }
 
-            $this->app->flashNow('error', 'Please upload correct file in pdf format');
-            $this->app->render('patents/new.twig');
+
 
             }
-else {
-  # code...
+            else {
 
             $this->app->flashNow('error', join('<br>', $validation->getValidationErrors()));
             $this->app->render('patents/new.twig');
-            }
+
         }
 
     }
+  }
 
 
 

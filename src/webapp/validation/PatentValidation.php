@@ -44,7 +44,7 @@ class PatentValidation {
         }
 
       //  if(empty($file) ) {
-        //  $this->validationErrors[] = "Please upload correct file in pdf format";
+        //  $this->validationErrors[] = "PDF file needed";
         //}
 
         return $this->validationErrors;
