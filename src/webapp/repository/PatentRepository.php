@@ -46,6 +46,17 @@ class PatentRepository
 
         return $this->makePatentFromRow($row);
     }
+/*    public function searchPatents($searchword)
+    {
+      $sql  = "SELECT * FROM patent WHERE company = $searchword OR title= $searchword";
+      $result = $this->pdo->query($sql);
+      $row = $result->fetch();
+
+      if($row === false) {
+          return false;
+      }
+      return $this->makePatentFromRow($row);
+    }*/
 
     public function all()
     {

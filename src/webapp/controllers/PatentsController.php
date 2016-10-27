@@ -76,35 +76,56 @@ class PatentsController extends Controller
         } else {
             $request     = $this->app->request;
             $title       = $request->post('title');
-            $company     = $request->post('company');
             $description = $request->post('description');
+            $company     = $request->post('company');
             $date        = date("dmY");
-            $file = $this -> startUpload();
 
-            $validation = new PatentValidation($title, $company, $file, $description);
 
-            if ($validation->isGoodToGo()) {
+  $validation = new PatentValidation($company, $title, $description);
+          if ($validation->isGoodToGo()) {
+
+            if(isset($_POST['submit']))
+            {
+              $target_dir =  getcwd()."/web/uploads/";
+              $targetFile = $target_dir . basename($_FILES['uploaded']['name']);
+              $ext = pathinfo($targetFile, PATHINFO_EXTENSION);
+            if ($ext === 'pdf' || empty($_FILES['uploaded']['name'])) {
+
+              if(move_uploaded_file($_FILES['uploaded']['tmp_name'], $targetFile))
+              {
                 $patent = new Patent($company, $title, $description, $date, $file);
                 $savedPatent = $this->patentRepository->save($patent);
                 $this->app->redirect('/patents/' . $savedPatent . '?msg="Patent succesfully registered');
-            }
-        }
-
-            $errors = join("<br>\n", $validation->getValidationErrors());
-            $this->app->flashNow('error', $errors);
-            $this->app->render('patents/new.twig');
-    }
-
-    public function startUpload()
-    {
-        if(isset($_POST['submit']))
-        {
-            $target_dir =  getcwd()."/web/uploads/";
-            $targetFile = $target_dir . basename($_FILES['uploaded']['name']);
-            if(move_uploaded_file($_FILES['uploaded']['tmp_name'], $targetFile))
-            {
                 return $targetFile;
+
+              }
+              $patent = new Patent($company, $title, $description, $date, $file);
+              $savedPatent = $this->patentRepository->save($patent);
+              $this->app->redirect('/patents/' . $savedPatent . '?msg="Patent succesfully registered');
+
+              }
+
+              else {
+                $this->app->flashNow('error', 'PDF files only');
+                $this->app->render('patents/new.twig');
+              }
+
+
+
             }
+
+
+
+            }
+            else {
+
+            $this->app->flashNow('error', join('<br>', $validation->getValidationErrors()));
+            $this->app->render('patents/new.twig');
+
         }
+
+
     }
+  }
+
 }
