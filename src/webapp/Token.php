@@ -2,7 +2,6 @@
 
 namespace tdt4237\webapp;
 
-use Exception;
 use tdt4237\webapp\Hash;
 
 class Token
