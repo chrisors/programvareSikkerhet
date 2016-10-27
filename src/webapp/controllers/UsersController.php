@@ -147,9 +147,9 @@ class UsersController extends Controller
         ]);
     }
 
-    //public function destroy()
-    //{
-    //    $this->auth->logout();
-    //    $this->app->redirect('/');
-    //}
+    public function destroy()
+    {
+      $this->auth->logout();
+      $this->app->redirect('/');
+    }
 }
