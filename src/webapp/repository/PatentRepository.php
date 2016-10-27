@@ -46,7 +46,7 @@ class PatentRepository
 
         return $this->makePatentFromRow($row);
     }
-/*    public function searchPatents($searchword)
+    public function searchPatents($searchword)
     {
       $sql  = "SELECT * FROM patent WHERE company = $searchword OR title= $searchword";
       $result = $this->pdo->query($sql);
@@ -56,7 +56,7 @@ class PatentRepository
           return false;
       }
       return $this->makePatentFromRow($row);
-    }*/
+    }
 
     public function all()
     {

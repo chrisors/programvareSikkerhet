@@ -28,6 +28,7 @@ class PatentsController extends Controller
             $patent->sortByDate();
         }
         $users = $this->userRepository->all();
+
         $this->render('patents/index.twig', ['patent' => $patent, 'users' => $users]);
     }
 
@@ -39,7 +40,11 @@ class PatentsController extends Controller
         $request = $this->app->request;
         $message = $request->get('msg');
         $variables = [];
-
+/*
+        $request = $this->app->request;
+        $searchword    = $request->post('patents');
+        $search = $his->patentRepository->searchPatents($searchword);
+*/
 
         if($message) {
             $variables['msg'] = $message;
@@ -49,7 +54,8 @@ class PatentsController extends Controller
         $this->render('patents/show.twig', [
             'patent' => $patent,
             'user' => $user,
-            'flash' => $variables
+            'flash' => $variables,
+            'search' => $search
         ]);
 
     }
