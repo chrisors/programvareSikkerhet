@@ -52,7 +52,7 @@ class SessionsController extends Controller
             $this->userRepository->updateLoginAttempts($failed_logins, $first_failed_login, $user);
             $this->app->flashNow('error', "Incorrect user/pass for $user, $attempts_left attempts left");
           }
-          if (strcmp($token, $_SESSION['token']) == 0 and $this->auth->checkCredentials($user, $pass)) {
+          if ($this->token->validate($token) and $this->auth->checkCredentials($user, $pass)) {
               //both username/password and token must match
               session_regenerate_id();
               $_SESSION['user'] = $user;
