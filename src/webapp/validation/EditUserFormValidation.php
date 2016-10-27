@@ -44,7 +44,7 @@ class EditUserFormValidation
 
     private function validateCompany($company)
     {
-      if(empty($company) or !preg_match('/^[A-Za-z0-9_]+$/',$company)) {
+      if(empty($company) or strlen($company) > 10000) {
           $this->validationErrors[] = "Please write in company name";
       }
 
