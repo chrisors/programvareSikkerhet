@@ -74,4 +74,11 @@ class SessionsController extends Controller
         }
         $this->render('sessions/new.twig', []);
     }
+
+    public function destroy()
+    {
+      session_regenerate_id();
+      $this->auth->logout();
+      $this->app->redirect('/');
+    }
 }
