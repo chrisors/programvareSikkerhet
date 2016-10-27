@@ -73,10 +73,18 @@ class PatentsController extends Controller
             $description = $request->post('description');
             $company     = $request->post('company');
             $date        = date("dmY");
+<<<<<<< HEAD
             $file = $this -> startUpload();
 
             $validation = new PatentValidation($title, $description);
             if ($validation->isGoodToGo()) {
+=======
+
+
+            $validation = new PatentValidation($company, $title);
+            if ($validation->isGoodToGo()) {
+                $file = $this -> startUpload();
+>>>>>>> parent of 7119a4c... File restriction to pdf
                 $patent = new Patent($company, $title, $description, $date, $file);
                 $patent->setCompany($company);
                 $patent->setTitle($title);
@@ -88,6 +96,7 @@ class PatentsController extends Controller
             }
         }
 
+<<<<<<< HEAD
             $this->app->flashNow('error', join('<br>', $validation->getValidationErrors()));
             $this->app->render('patents/new.twig');
     }
@@ -103,6 +112,26 @@ class PatentsController extends Controller
                 return $targetFile;
             }
         }
+=======
+              $this->app->flashNow('error', join('<br>', $validation->getValidationErrors()));
+              $this->app->render('patents/new.twig');
+
+        }
+
+    }
+
+    public function startUpload()
+    {
+        if(isset($_POST['submit']))
+        {
+            $target_dir =  getcwd()."/web/uploads/";
+            $targetFile = $target_dir . basename($_FILES['uploaded']['name']);
+            if(move_uploaded_file($_FILES['uploaded']['tmp_name'], $targetFile))
+            {
+                return $targetFile;
+            }
+        }
+>>>>>>> parent of 7119a4c... File restriction to pdf
     }
 
     public function destroy($patentId)
