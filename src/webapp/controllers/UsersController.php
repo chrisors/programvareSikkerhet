@@ -146,11 +146,4 @@ class UsersController extends Controller
           'users' => $this->userRepository->all()
         ]);
     }
-
-    public function destroy()
-    {
-      session_regenerate_id();
-      $this->auth->logout();
-      $this->app->redirect('/');
-    }
 }
