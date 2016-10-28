@@ -9,6 +9,8 @@ use tdt4237\webapp\models\PatentCollection;
 class PatentRepository
 {
     const SEARCH_COMPANY = "SELECT * FROM patent WHERE company='%s' OR title='%s'";
+    const SELECT_ALL = "SELECT * FROM patent";
+
     /**
      * @var PDO
      */
@@ -61,7 +63,7 @@ class PatentRepository
 
     public function all()
     {
-        $sql   = "SELECT * FROM patent";
+        $sql   = self::SELECT_ALL;
         $results = $this->pdo->query($sql);
 
         if($results === false) {

@@ -10,7 +10,7 @@ use tdt4237\webapp\models\User;
 
 class UserRepository
 {
-    const INSERT_QUERY = "INSERT INTO users(user, pass, first_name, last_name, phone, company, isadmin) VALUES(:user, :pass, :first_name , :last_name , :phone, :company, :admin)";
+    const INSERT_QUERY = "INSERT INTO users(user, pass, first_name, last_name, phone, company, isadmin) VALUES(:user, :pass, :first_name, :last_name, :phone, :company, :admin)";
     const UPDATE_QUERY = "UPDATE users SET email=:email, first_name=:first_name, last_name=:last_name, isadmin=:admin, phone =:phone , company =:company WHERE id=:id";
     const FIND_BY_NAME = "SELECT * FROM users WHERE user=:user";
     const DELETE_BY_NAME = "DELETE FROM users WHERE user=:user";
@@ -142,9 +142,9 @@ class UserRepository
       return $stmt->execute();
     }
 
-    public function updateLoginAttempts($failed_logins, $first_failed_login, $username)
+    public function updateLoginAttempts($failed_logins, $first_failed_login, $user)
     {
-      $sql = sprintf(self::UPDATE_LOGIN_ATTEMPTS, $failed_logins, $first_failed_login, $username);
+      $sql = sprintf(self::UPDATE_LOGIN_ATTEMPTS, $failed_logins, $first_failed_login, $user);
       $stmt = $this->pdo->prepare($sql);
       return $stmt->execute();
     }
@@ -152,17 +152,17 @@ class UserRepository
     public function readLoginAttempts($user)
     {
       $sql = sprintf(self::READ_LOGIN_ATTEMPTS);
-      $statement = $this->pdo->prepare($sql);
-      $statement->execute(['user'=>$user]);
-      return $statement->fetchColumn();
+      $stmt = $this->pdo->prepare($sql);
+      $stmt->execute(['user'=>$user]);
+      return $stmt->fetchColumn();
     }
 
     public function readFirstFailedLogin($user)
     {
       $sql = sprintf(self::READ_FIRST_FAILED_LOGIN);
-      $statement = $this->pdo->prepare($sql);
-      $statement->execute(['user'=>$user]);
-      return $statement->fetchColumn();
+      $stmt = $this->pdo->prepare($sql);
+      $stmt->execute(['user'=>$user]);
+      return $stmt->fetchColumn();
     }
 
 }
