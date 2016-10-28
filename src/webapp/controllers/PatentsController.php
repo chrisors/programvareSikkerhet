@@ -34,20 +34,21 @@ class PatentsController extends Controller
     public function search()
     {
       $request = $this->app->request;
-      $patentSearch = $request->post('patentsSearch'); //this work
+      $company = $request->post('patentsSearch'); //this work
+      $title = $company;
       $patent = $this->patentRepository->all();
       $users = $this->userRepository->all();
 
-//      $searchQuery = $this->patentRepository->searchPatents($patentSearch);
-      $test = $this->patentRepository->find($patentSearch);
+      $searchQuery = $this->patentRepository->searchPatents($company, $title);
+//      $test = $this->patentRepository->find($company);
 
 //      echo '<pre>'; print_r($test); echo '</pre>';
-      echo '<pre>'; print_r($searchQuery); echo '</pre>';
+//      echo '<pre>'; print_r($searchQuery); echo '</pre>';
 
       $this->render('patents/index.twig', [
           'patent' => $patent,
           'user' => $user,
-          'test' => $test,
+          'search' => $searchQuery
       ]);
     }
 
@@ -99,52 +100,41 @@ class PatentsController extends Controller
             $company     = $request->post('company');
             $date        = date("dmY");
 
+            $validation = new PatentValidation($company, $title, $description);
 
-  $validation = new PatentValidation($company, $title, $description);
           if ($validation->isGoodToGo()) {
 
             if(isset($_POST['submit']))
             {
-              $target_dir =  getcwd()."/web/uploads/";
-              $tarsearchPatentsgetFile = $target_dir . basename($_FILES['uploaded']['name']);
-              $ext = pathinfo($targetFile, PATHINFO_EXTENSION);
-            if ($ext === 'pdf' || empty($_FILES['uploaded']['name'])) {
+                $target_dir =  getcwd()."/web/uploads/";
+                $tarsearchPatentsgetFile = $target_dir . basename($_FILES['uploaded']['name']);
+                $ext = pathinfo($targetFile, PATHINFO_EXTENSION);
 
-              if(move_uploaded_file($_FILES['uploaded']['tmp_name'], $targetFile))
-              {
-                $patent = new Patent($company, $title, $description, $date, $file);
-                $savedPatent = $this->patentRepository->save($patent);
-                $this->app->redirect('/patents/' . $savedPatent . '?msg="Patent succesfully registered');
-                return $targetFile;
+                if ($ext === 'pdf' || empty($_FILES['uploaded']['name'])) {
 
-              }
-              $patent = new Patent($company, $title, $description, $date, $file);
-              $savedPatent = $this->patentRepository->save($patent);
-              $this->app->redirect('/patents/' . $savedPatent . '?msg="Patent succesfully registered');
+                  if(move_uploaded_file($_FILES['uploaded']['tmp_name'], $targetFile))
+                  {
 
-              }
+                    $patent = new Patent($company, $title, $description, $date, $file);
+                    $savedPatent = $this->patentRepository->save($patent);
+                    $this->app->redirect('/patents/' . $savedPatent . '?msg="Patent succesfully registered');
+                    return $targetFile;
 
-              else {
-                $this->app->flashNow('error', 'PDF files only');
-                $this->app->render('patents/new.twig');
-              }
+                  }
 
-
-
+                  $patent = new Patent($company, $title, $description, $date, $file);
+                  $savedPatent = $this->patentRepository->save($patent);
+                  $this->app->redirect('/patents/' . $savedPatent . '?msg="Patent succesfully registered');
+                }else {
+                  $this->app->flashNow('error', 'PDF files only');
+                  $this->app->render('patents/new.twig');
+                }
             }
-
-
-
-            }
-            else {
-
+          }else {
             $this->app->flashNow('error', join('<br>', $validation->getValidationErrors()));
             $this->app->render('patents/new.twig');
-
+          }
         }
-
-
     }
-  }
-
+    
 }
