@@ -33,42 +33,44 @@
             {% endif %}
         </tbody>
     </table>
+
+
     <h2>Search for Patents</h2>
     <form action="" method="post" class="ui form">
-        <div class="field">
-            <input type="text" name="patentsSearch">
-        </div>
-        <input type="submit" name="submit" value="search" class="positive ui button">
+      <div class="field">
+        <input type="text" name="patentsSearch">
+      </div>
+      <input type="submit" name="submit" value="search" class="positive ui button">
 
-    <table class="ui single line table">
+      <table class="ui single line table">
         <thead>
-            <tr>
-            <th> Title </th>
-            <th> Company/User </th>
-            <th> Description </th>
+          <tr>
+          <th> Title </th>
+          <th> Company/User </th>
+          <th> Description </th>
           </tr>
         </thead>
 
         <tbody>
-            {% for patents in search %}
+            {% for tests in test %}
           <tr>
-            <td><a href="/patents/{{patents.patentId}}">{{ patents.title }}</a></td>
-                {% if patents.company == user.username %}
-                    <td><a href="/users/{{ patents.company }}">{{ patents.company }}</a></td>
+            <td><a href="/patents/{{tests.patentId}}">{{ tests.title }}</a></td>
+                {% if tests.company == user.username %}
+                    <td><a href="/users/{{ tests.company }}">{{ tests.company }}</a></td>
                 {% else %}
-            <td> {{ patents.company }} </td>
+            <td> {{ tests.company }} </td>
 
                 {% endif %}
-            <td> {{ patents.description }}</td>
+            <td> {{ tests.description }}</td>
           </tr>
-          {% endfor %}
+            {% endfor %}
 
-            {% if patent is empty %}
+            {% if test is empty %}
             <tr>
                 <td colspan="3">There are no patents registered yet!</td>
             </tr>
             {% endif %}
         </tbody>
-    </table>
+      </table>
     </form>
 {% endblock %}

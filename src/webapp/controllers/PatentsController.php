@@ -31,23 +31,25 @@ class PatentsController extends Controller
         $this->render('patents/index.twig', ['patent' => $patent, 'users' => $users]);
     }
 
-/*    public function search()
+    public function search()
     {
       $request = $this->app->request;
       $patentSearch = $request->post('patentsSearch'); //this work
       $patent = $this->patentRepository->all();
       $users = $this->userRepository->all();
-  //          $searchQuery = $this->patentRepository->searchPatents($patentSearch);
-//      echo "$patentSearch";
 
-//            echo "$searchQuery";
+//      $searchQuery = $this->patentRepository->searchPatents($patentSearch);
+      $test = $this->patentRepository->find($patentSearch);
+
+//      echo '<pre>'; print_r($test); echo '</pre>';
+      echo '<pre>'; print_r($searchQuery); echo '</pre>';
 
       $this->render('patents/index.twig', [
-//          'patentsSearch' => $searchQuery,
           'patent' => $patent,
-          'users' => $users
+          'user' => $user,
+          'test' => $test,
       ]);
-    }*/
+    }
 
     public function show($patentId)
     {

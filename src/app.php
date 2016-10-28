@@ -72,7 +72,7 @@ $app->post('/profile/edit', $ns . 'UsersController:update');
 
 // Patents
 $app->get('/patents', $ns . 'PatentsController:index')->name('showpatents');
-//$app->post('/patents', $ns . 'PatentsController:search');
+$app->post('/patents', $ns . 'PatentsController:search');
 $app->get('/patents/new', $ns . 'PatentsController:newpatent')->name('registerpatent');
 $app->post('/patents/new', $ns . 'PatentsController:create');
 $app->get('/patents/:patentId', $ns . 'PatentsController:show');

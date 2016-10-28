@@ -32,7 +32,6 @@ class PatentRepository
         return $patent;
     }
 
-
     public function find($patentId)
     {
         $sql  = "SELECT * FROM patent WHERE patentId = $patentId";
@@ -46,20 +45,27 @@ class PatentRepository
 
         return $this->makePatentFromRow($row);
     }
+
 /*    public function searchPatents($patentSearch)
     {
-        $sql  = "SELECT * FROM patent WHERE company = $patentSearch";
-        $result = $this->pdo->query($sql);
-        $row = $result->fetch();
+      $sql1  = "SELECT * FROM patent WHERE company = $patentSearch";
+      $results = $this->pdo->query($sql1);
 
-        if($row === false) {
-            return false;
-        }
+      if($results === false) {
+          return [];
+          throw new \Exception('PDO error in patent all()');
+      }
 
+      $fetch = $results->fetchAll();
+      if(count($fetch) == 0) {
+          return false;
+      }
 
-      return $this->makePatentFromRow($row);
-    }
-*/
+      return new PatentCollection(
+          array_map([$this, 'makePatentFromRow'], $fetch)
+      );
+    }*/
+
     public function all()
     {
         $sql   = "SELECT * FROM patent";
