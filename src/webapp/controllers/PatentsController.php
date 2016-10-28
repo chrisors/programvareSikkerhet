@@ -34,16 +34,12 @@ class PatentsController extends Controller
     public function search()
     {
       $request = $this->app->request;
-      $company = $request->post('patentsSearch'); //this work
+      $company = $request->post('patentsSearch');
       $title = $company;
       $patent = $this->patentRepository->all();
       $users = $this->userRepository->all();
 
       $searchQuery = $this->patentRepository->searchPatents($company, $title);
-//      $test = $this->patentRepository->find($company);
-
-//      echo '<pre>'; print_r($test); echo '</pre>';
-//      echo '<pre>'; print_r($searchQuery); echo '</pre>';
 
       $this->render('patents/index.twig', [
           'patent' => $patent,
@@ -136,5 +132,5 @@ class PatentsController extends Controller
           }
         }
     }
-    
+
 }
