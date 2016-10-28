@@ -49,4 +49,5 @@ class PatentValidation {
 
         return $this->validationErrors;
     }
+
 }

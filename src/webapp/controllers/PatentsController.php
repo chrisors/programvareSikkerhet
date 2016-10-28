@@ -38,8 +38,13 @@ class PatentsController extends Controller
       $title = $company;
       $patent = $this->patentRepository->all();
       $users = $this->userRepository->all();
-
-      $searchQuery = $this->patentRepository->searchPatents($company, $title);
+      if (preg_match("/([A-Za-z0-9]+)/", $company))
+      {
+        $searchQuery = $this->patentRepository->searchPatents($company, $title);
+      }else{
+        $searchQuery = "";
+      }
+//      $searchQuery = $this->patentRepository->searchPatents($company, $title);
 
       $this->render('patents/index.twig', [
           'patent' => $patent,
