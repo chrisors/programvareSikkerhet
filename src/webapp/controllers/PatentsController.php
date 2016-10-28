@@ -14,9 +14,14 @@ class PatentsController extends Controller
         parent::__construct();
     }
 
-
     public function index()
     {
+
+      if ($this->auth->guest()) {
+          $this->app->flash("info", "You must be logged in to see all patents");
+          $this->app->redirect("/login");
+      }
+
         $patent = $this->patentRepository->all();
         if($patent != null)
         {
@@ -24,6 +29,23 @@ class PatentsController extends Controller
         }
         $users = $this->userRepository->all();
         $this->render('patents/index.twig', ['patent' => $patent, 'users' => $users]);
+    }
+
+    public function search()
+    {
+      $request = $this->app->request;
+      $company = $request->post('patentsSearch');
+      $title = $company;
+      $patent = $this->patentRepository->all();
+      $users = $this->userRepository->all();
+
+      $searchQuery = $this->patentRepository->searchPatents($company, $title);
+
+      $this->render('patents/index.twig', [
+          'patent' => $patent,
+          'user' => $user,
+          'search' => $searchQuery
+      ]);
     }
 
     public function show($patentId)
@@ -73,76 +95,42 @@ class PatentsController extends Controller
             $description = $request->post('description');
             $company     = $request->post('company');
             $date        = date("dmY");
-<<<<<<< HEAD
-            $file = $this -> startUpload();
 
-            $validation = new PatentValidation($title, $description);
-            if ($validation->isGoodToGo()) {
-=======
+            $validation = new PatentValidation($company, $title, $description);
 
+          if ($validation->isGoodToGo()) {
 
-            $validation = new PatentValidation($company, $title);
-            if ($validation->isGoodToGo()) {
-                $file = $this -> startUpload();
->>>>>>> parent of 7119a4c... File restriction to pdf
-                $patent = new Patent($company, $title, $description, $date, $file);
-                $patent->setCompany($company);
-                $patent->setTitle($title);
-                $patent->setDescription($description);
-                $patent->setDate($date);
-                $patent->setFile($file);
-                $savedPatent = $this->patentRepository->save($patent);
-                $this->app->redirect('/patents/' . $savedPatent . '?msg="Patent succesfully registered');
+            if(isset($_POST['submit']))
+            {
+                $target_dir =  getcwd()."/web/uploads/";
+                $tarsearchPatentsgetFile = $target_dir . basename($_FILES['uploaded']['name']);
+                $ext = pathinfo($targetFile, PATHINFO_EXTENSION);
+
+                if ($ext === 'pdf' || empty($_FILES['uploaded']['name'])) {
+
+                  if(move_uploaded_file($_FILES['uploaded']['tmp_name'], $targetFile))
+                  {
+
+                    $patent = new Patent($company, $title, $description, $date, $file);
+                    $savedPatent = $this->patentRepository->save($patent);
+                    $this->app->redirect('/patents/' . $savedPatent . '?msg="Patent succesfully registered');
+                    return $targetFile;
+
+                  }
+
+                  $patent = new Patent($company, $title, $description, $date, $file);
+                  $savedPatent = $this->patentRepository->save($patent);
+                  $this->app->redirect('/patents/' . $savedPatent . '?msg="Patent succesfully registered');
+                }else {
+                  $this->app->flashNow('error', 'PDF files only');
+                  $this->app->render('patents/new.twig');
+                }
             }
-        }
-
-<<<<<<< HEAD
+          }else {
             $this->app->flashNow('error', join('<br>', $validation->getValidationErrors()));
             $this->app->render('patents/new.twig');
+          }
+        }
     }
 
-    public function startUpload()
-    {
-        if(isset($_POST['submit']))
-        {
-            $target_dir =  getcwd()."/web/uploads/";
-            $targetFile = $target_dir . basename($_FILES['uploaded']['name']);
-            if(move_uploaded_file($_FILES['uploaded']['tmp_name'], $targetFile))
-            {
-                return $targetFile;
-            }
-        }
-=======
-              $this->app->flashNow('error', join('<br>', $validation->getValidationErrors()));
-              $this->app->render('patents/new.twig');
-
-        }
-
-    }
-
-    public function startUpload()
-    {
-        if(isset($_POST['submit']))
-        {
-            $target_dir =  getcwd()."/web/uploads/";
-            $targetFile = $target_dir . basename($_FILES['uploaded']['name']);
-            if(move_uploaded_file($_FILES['uploaded']['tmp_name'], $targetFile))
-            {
-                return $targetFile;
-            }
-        }
->>>>>>> parent of 7119a4c... File restriction to pdf
-    }
-
-    public function destroy($patentId)
-    {
-        if ($this->patentRepository->deleteByPatentid($patentId) === 1) {
-            $this->app->flash('info', "Sucessfully deleted '$patentId'");
-            $this->app->redirect('/admin');
-            return;
-        }
-
-        $this->app->flash('info', "An error ocurred. Unable to delete user '$username'.");
-        $this->app->redirect('/admin');
-    }
 }

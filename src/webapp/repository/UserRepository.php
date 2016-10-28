@@ -16,6 +16,7 @@ class UserRepository
     const DELETE_BY_NAME = "DELETE FROM users WHERE user='%s'";
     const SELECT_ALL     = "SELECT * FROM users";
     const FIND_FULL_NAME   = "SELECT * FROM users WHERE user='%s'";
+    const UPDATE_LOGIN_ATTEMPTS = "UPDATE users SET failed_logins='%s', first_failed_login='%s' WHERE user='%s'";
 
     /**
      * @var PDO
@@ -36,6 +37,8 @@ class UserRepository
         $user->setPhone($row['phone']);
         $user->setCompany($row['company']);
         $user->setIsAdmin($row['isadmin']);
+        $user->setFailed_logins($row['failed_logins']);
+        $user->setFirst_failed_login($row['first_failed_login']);
 
         if (!empty($row['email'])) {
             $user->setEmail(new Email($row['email']));
@@ -63,7 +66,7 @@ class UserRepository
         $query  = sprintf(self::FIND_BY_NAME, $username);
         $result = $this->pdo->query($query, PDO::FETCH_ASSOC);
         $row = $result->fetch();
-        
+
         if ($row === false) {
             return false;
         }
@@ -78,10 +81,18 @@ class UserRepository
         );
     }
 
+    public function getIsAdmin($user)
+    {
+      $sql = "SELECT isadmin FROM users WHERE user=:user";
+      $statement = $this->pdo->prepare($sql);
+      $statement->execute(['user'=>$user]);
+      return $statement->fetchColumn();
+    }
+
     public function all()
     {
         $rows = $this->pdo->query(self::SELECT_ALL);
-        
+
         if ($rows === false) {
             return [];
             throw new \Exception('PDO error in all()');
@@ -115,6 +126,30 @@ class UserRepository
         );
 
         return $this->pdo->exec($query);
+    }
+
+    public function updateLoginAttempts($failed_logins, $first_failed_login, $username)
+    {
+      $query = sprintf(
+          self::UPDATE_LOGIN_ATTEMPTS, $failed_logins, $first_failed_login, $username
+      );
+      return $this->pdo->exec($query);
+    }
+
+    public function readLoginAttempts($user)
+    {
+      $sql = "SELECT failed_logins FROM users WHERE user=:user";
+      $statement = $this->pdo->prepare($sql);
+      $statement->execute(['user'=>$user]);
+      return $statement->fetchColumn();
+    }
+
+    public function readFirstFailedLogin($user)
+    {
+      $sql = "SELECT first_failed_login FROM users WHERE user=:user";
+      $statement = $this->pdo->prepare($sql);
+      $statement->execute(['user'=>$user]);
+      return $statement->fetchColumn();
     }
 
 }

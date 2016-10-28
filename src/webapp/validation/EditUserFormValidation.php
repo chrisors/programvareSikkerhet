@@ -5,17 +5,17 @@ namespace tdt4237\webapp\validation;
 class EditUserFormValidation
 {
     private $validationErrors = [];
-    
+
     public function __construct($email, $phone, $company)
     {
         $this->validate($email, $phone, $company);
     }
-    
+
     public function isGoodToGo()
     {
-        return \count($this->validationErrors) === 0;
+        return empty($this->validationErrors);
     }
-    
+
     public function getValidationErrors()
     {
         return $this->validationErrors;
@@ -27,26 +27,26 @@ class EditUserFormValidation
         $this->validatePhone($phone);
         $this->validateCompany($company);
     }
-    
+
     private function validateEmail($email)
     {
         if (! filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $this->validationErrors[] = "Invalid email format on email";
         }
     }
-    
+
     private function validatePhone($phone)
     {
-        if (! is_numeric($phone) or $phone < 00000000 or $phone > 99999999) {
-            $this->validationErrors[] = 'Phoe must be between 00000000 and 99999999.';
+        if (!is_numeric($phone) or strlen($phone) !="8") {
+            $this->validationErrors[] = 'Phone must be eight digits';
         }
     }
 
     private function validateCompany($company)
     {
-        if(strlen($company) > 0 && (!preg_match('/[^0-9]/',$company)))
-        {
-            $this->validationErrors[] = 'Company can only contain letters';
-        }
+      if(empty($company) or strlen($company) > 50) {
+          $this->validationErrors[] = "Please write in company name";
+      }
+
     }
 }

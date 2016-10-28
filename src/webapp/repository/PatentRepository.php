@@ -8,7 +8,7 @@ use tdt4237\webapp\models\PatentCollection;
 
 class PatentRepository
 {
-
+    const SEARCH_COMPANY = "SELECT * FROM patent WHERE company='%s' OR title='%s'";
     /**
      * @var PDO
      */
@@ -32,7 +32,6 @@ class PatentRepository
         return $patent;
     }
 
-
     public function find($patentId)
     {
         $sql  = "SELECT * FROM patent WHERE patentId = $patentId";
@@ -45,6 +44,21 @@ class PatentRepository
 
 
         return $this->makePatentFromRow($row);
+    }
+
+    public function searchPatents($company, $title)
+    {
+      $query = sprintf(self::SEARCH_COMPANY, $company, $title);
+      $result = $this->pdo->query($query, PDO::FETCH_ASSOC);
+      $row = $result->fetchAll();
+
+      if ($row === false) {
+          return false;
+      }
+
+      return new PatentCollection(
+       array_map([$this, 'makePatentFromRow'], $row)
+      );
     }
 
     public function all()

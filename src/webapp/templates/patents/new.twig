@@ -3,31 +3,40 @@
 {% block content %}
     <h2>Register patent</h2>
 
-    <form action="#" method="post" enctype="multipart/form-data" class="ui form">
+    {% if flash.error %}
         <div class="ui error message">
-            {{ flash.error }}
+            {{ flash.error|raw }}
+        </div>
+    {% endif %}
+
+    {% if flash.info %}
+        <div class="ui warning message">
+            {{ flash.info }}
+        </div>
+    {% endif %}
+
+    <form action="" method="post" enctype="multipart/form-data" class="ui form">
+        <div class="field">
+            <label>Title* (Must be between 3 and 25 characters)</label>
+            <input type = "text" name="title" pattern=".{3,25}">
         </div>
 
         <div class="field">
-            <label>Title</label>
-            <input type = "text" name="title">
+            <label>Company/User* (Must be between 3 and 25 characters)</label>
+            <input type="text" name="company" pattern=".{3,25}">
         </div>
 
         <div class="field">
-            <label>Company/User</label>
-            <input type="text" name="company">
+            <label>Select patent to upload (PDF only)</label>
+            <input type="file" name="uploaded" accept="application/pdf">
         </div>
 
         <div class="field">
-            <label>Select patent to upload</label>
-            <input type="file" name="uploaded">
+            <label>Description* (Maximum of 10000 characters)</label>
+            <textarea cols="40" rows="10" maxlength="10000" name="description"> </textarea>
         </div>
 
-        <div class="field">
-            <label>Description</label>
-            <textarea cols="40" rows="10" name="description"> </textarea>
-        </div>
-
+        <input type="hidden" name="token" value="{{ token }}">
         <input type="submit" name="submit" value="Register patent" class="positive ui button">
     </form>
 {% endblock %}

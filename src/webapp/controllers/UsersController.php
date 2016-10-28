@@ -54,16 +54,23 @@ class UsersController extends Controller
 
     public function create()
     {
-        $request  = $this->app->request;
-        $username = $request->post('user');
-        $password = $request->post('pass');
+        $request   = $this->app->request;
+        $username  = $request->post('user');
+        $password  = $request->post('pass');
         $firstName = $request->post('first_name');
-        $lastName = $request->post('last_name');
-        $phone = $request->post('phone');
-        $company = $request->post('company');
+        $lastName  = $request->post('last_name');
+        $phone     = $request->post('phone');
+        $company   = $request->post('company');
 
+        $token     = $request->post('token');
 
         $validation = new RegistrationFormValidation($username, $password, $firstName, $lastName, $phone, $company);
+
+        if(!$this->token->validate($token)){
+          $this->app->flashNow('info', 'An error has occurred');
+          $this->render('users/new.twig', ['user' => $user]);
+          return;
+        }
 
         if ($validation->isGoodToGo()) {
             $password = $password;
@@ -97,9 +104,15 @@ class UsersController extends Controller
         $request    = $this->app->request;
         $email      = $request->post('email');
         $firstName  = $request->post('first_name');
-        $lastName  = $request->post('last_name');
-        $phone    = $request->post('phone');
-        $company   = $request->post('company');
+        $lastName   = $request->post('last_name');
+        $phone      = $request->post('phone');
+        $company    = $request->post('company');
+        $token      = $request->post('token');
+
+        if(!$this->token->validate($token)){
+          $this->app->flashNow('info', 'An error has occurred');
+          return $this->render('users/edit.twig', ['user' => $user]);
+        }
 
         $validation = new EditUserFormValidation($email, $phone, $company);
 
@@ -119,23 +132,18 @@ class UsersController extends Controller
         $this->render('users/edit.twig', ['user' => $user]);
     }
 
-    public function destroy($username)
-    {
-        if ($this->userRepository->deleteByUsername($username) === 1) {
-            $this->app->flash('info', "Sucessfully deleted '$username'");
-            $this->app->redirect('/admin');
-            return;
-        }
-
-        $this->app->flash('info', "An error ocurred. Unable to delete user '$username'.");
-        $this->app->redirect('/admin');
-    }
-
     public function makeSureUserIsAuthenticated()
     {
         if ($this->auth->guest()) {
             $this->app->flash('info', 'You must be logged in to edit your profile.');
             $this->app->redirect('/login');
         }
+    }
+
+    public function all()
+    {
+        $this->render('users.twig', [
+          'users' => $this->userRepository->all()
+        ]);
     }
 }
