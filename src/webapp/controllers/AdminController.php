@@ -53,15 +53,16 @@ class AdminController extends Controller
 
     public function destroyuser($username)
     {
-        $this->checkifAdmin();
+      $user = $this->userRepository->findByUser($username);
 
-        if ($this->userRepository->deleteByUsername($username) === 1) {
-            $this->app->flash('info', "Successfully deleted '$username'");
+        if ($this->auth->isAdmin() and $user->getUsername() !== $this->auth->getUsername()) {
+            $this->userRepository->deleteByUsername($username) === 1;
+            $this->app->flash('info', "Sucessfully deleted '$username'");
             $this->app->redirect('/admin');
+
             return;
         }
-
         $this->app->flash('info', "An error occurred. Unable to delete user '$username'.");
-        $this->app->redirect('/admin');
+        $this->app->redirect('/');
     }
 }

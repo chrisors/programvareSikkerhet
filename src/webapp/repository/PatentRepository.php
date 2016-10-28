@@ -56,9 +56,7 @@ class PatentRepository
           return false;
       }
 
-      return new PatentCollection(
-       array_map([$this, 'makePatentFromRow'], $row)
-      );
+      return new PatentCollection(array_map([$this, 'makePatentFromRow'], $row));
     }
 
     public function all()
