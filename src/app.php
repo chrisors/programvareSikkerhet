@@ -57,7 +57,7 @@ $app->get('/login', $ns . 'SessionsController:newSession');
 $app->post('/login', $ns . 'SessionsController:create');
 
 // Logout
-$app->get('/logout', $ns . 'UsersController:destroy')->name('logout');
+$app->get('/logout', $ns . 'SessionsController:destroy')->name('logout');
 
 // User management
 $app->get('/users/new', $ns . 'UsersController:newuser')->name('newuser');

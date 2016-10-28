@@ -22,7 +22,7 @@
         </div>
 
         <div class="field">
-            <label>Password* (Must be between 8 and 25 characters. Lower and uppercase letters, one number and one special characters)</label>
+            <label>Password* (Must be between 8 and 25 characters. Lower and uppercase letters, one number or one special characters)</label>
             <input type="password" name="pass" pattern=".{8,25}">
         </div>
 
@@ -42,8 +42,8 @@
         </div>
 
         <div class="field">
-            <label>Company (Must be between 3 and 25 characters)</label>
-            <input type="text" name="company" pattern=".{3,25}">
+            <label>Company (Must be between 3 and 50 characters)</label>
+            <input type="text" name="company" pattern=".{3,50}">
         </div>
 
         <input type="hidden" name="token" value="{{ token }}">
