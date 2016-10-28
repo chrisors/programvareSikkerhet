@@ -33,4 +33,43 @@
             {% endif %}
         </tbody>
     </table>
+
+    <h2>Search for Patents</h2>
+    <form action="" method="post" class="ui form">
+      <div class="field">
+        <input type="text" name="patentsSearch">
+      </div>
+      <input type="submit" name="submit" value="search" class="positive ui button">
+
+      <table class="ui single line table">
+        <thead>
+          <tr>
+          <th> Title </th>
+          <th> Company/User </th>
+          <th> Description </th>
+          </tr>
+        </thead>
+
+        <tbody>
+            {% for searchWord in search %}
+          <tr>
+            <td><a href="/patents/{{searchWord.patentId}}">{{ searchWord.title }}</a></td>
+                {% if searchWord.company == user.username %}
+                    <td><a href="/users/{{ searchWord.company }}">{{ searchWord.company }}</a></td>
+                {% else %}
+            <td> {{ searchWord.company }} </td>
+
+                {% endif %}
+            <td> {{ searchWord.description }}</td>
+          </tr>
+            {% endfor %}
+
+            {% if search is empty %}
+            <tr>
+                <td colspan="3">No Patents matched your search</td>
+            </tr>
+            {% endif %}
+        </tbody>
+      </table>
+    </form>
 {% endblock %}
