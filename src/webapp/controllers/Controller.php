@@ -25,12 +25,14 @@ class Controller
     protected function render($template, $variables = [])
     {
 
+        $variables['token'] = $this->token->getToken();
+
         if ($this->auth->check()) {
             $variables['isLoggedIn'] = true;
             $variables['isAdmin'] = $this->auth->isAdmin();
             $variables['loggedInUsername'] = $_SESSION['user'];
         }
-        $variables['token'] = $this->token->getToken();
+
         print $this->app->render($template, $variables);
     }
 }

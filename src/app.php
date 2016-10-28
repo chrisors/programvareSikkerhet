@@ -12,7 +12,7 @@ use tdt4237\webapp\repository\PatentRepository;
 require_once __DIR__ . '/../vendor/autoload.php';
 
 chdir(__DIR__ . '/../');
-chmod(__DIR__ . '/../web/uploads', 0777);
+chmod(__DIR__ . '/../web/uploads', 0700);
 
 $app = new Slim([
     'templates.path' => __DIR__.'/webapp/templates/',
