@@ -11,7 +11,7 @@ class PatentRepository
     const SEARCH_COMPANY = "SELECT * FROM patent WHERE company='%s' OR title='%s'";
     const SELECT_ALL = "SELECT * FROM patent";
 
-const INSERT_QUERY   = "INSERT INTO patent (company, title, description, date, file) VALUES('%s', '%s', '%s' , '%s' , '%s')";
+//const INSERT_QUERY   = "INSERT INTO patent (company, title, description, date, file) VALUES(:company, :title, :description, :date, :file)";
     /**
      * @var PDO
      */
@@ -105,13 +105,12 @@ const INSERT_QUERY   = "INSERT INTO patent (company, title, description, date, f
 
     public function save(Patent $patent)
     {
+
       $company        = $patent->getCompany();
        $title          = $patent->getTitle();
         $description    = $patent->getDescription();
         $date           = $patent->getDate();
         $file           = $patent->getFile();
-
-
           //$sql = "INSERT INTO patent (company, title, description, date, file) VALUES (:company, :title, :description, :date, :file)";
           //$sqlp = array( ':company' => $patent->getCompany(), ':title' => $patent->getTitle(), ':description' => $patent->getDescription(), ':date' => $patent->getDate(), ':file' => $patent->getFile());
 
