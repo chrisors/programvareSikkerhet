@@ -89,52 +89,44 @@ class PatentsController extends Controller
     }
 
     public function create()
-    {
-        if ($this->auth->guest()) {
-            $this->app->flash("info", "You must be logged on to register a patent");
-            $this->app->redirect("/login");
-        } else {
-            $request     = $this->app->request;
-            $title       = $request->post('title');
-            $description = $request->post('description');
-            $company     = $request->post('company');
-            $date        = date("dmY");
-
-            $validation = new PatentValidation($company, $title, $description);
-
-          if ($validation->isGoodToGo()) {
-
-            if(isset($_POST['submit']))
-            {
-                $target_dir =  getcwd()."/web/uploads/";
-                $tarsearchPatentsgetFile = $target_dir . basename($_FILES['uploaded']['name']);
-                $ext = pathinfo($targetFile, PATHINFO_EXTENSION);
-
-                if ($ext === 'pdf' || empty($_FILES['uploaded']['name'])) {
-
-                  if(move_uploaded_file($_FILES['uploaded']['tmp_name'], $targetFile))
-                  {
-
-                    $patent = new Patent($company, $title, $file, $description, $date);
-                    $savedPatent = $this->patentRepository->save($patent);
-                    $this->app->redirect('/patents/' . $savedPatent . '?msg="Patent succesfully registered');
-                    return $targetFile;
-
-                  }
-
-                  $patent = new Patent($company, $title, $file, $description, $date);
-                  $savedPatent = $this->patentRepository->save($patent);
-                  $this->app->redirect('/patents/' . $savedPatent . '?msg="Patent succesfully registered');
-                }else {
-                  $this->app->flashNow('error', 'PDF files only');
-                  $this->app->render('patents/new.twig');
+        {
+            if ($this->auth->guest()) {
+                $this->app->flash("info", "You must be logged on to register a patent");
+                $this->app->redirect("/login");
+            } else {
+                $request     = $this->app->request;
+                $title       = $request->post('title');
+                $description = $request->post('description');
+                $company     = $request->post('company');
+                $date        = date("dmY");
+                $validation = new PatentValidation($company, $title, $description);
+              if ($validation->isGoodToGo()) {
+                if(isset($_POST['submit']))
+                {
+                    $target_dir =  getcwd()."/web/uploads/";
+                    $tarsearchPatentsgetFile = $target_dir . basename($_FILES['uploaded']['name']);
+                    $ext = pathinfo($targetFile, PATHINFO_EXTENSION);
+                    if ($ext === 'pdf' || empty($_FILES['uploaded']['name'])) {
+                      if(move_uploaded_file($_FILES['uploaded']['tmp_name'], $targetFile))
+                      {
+                        $patent = new Patent($company, $title, $file, $description, $date);
+                        $savedPatent = $this->patentRepository->save($patent);
+                        $this->app->redirect('/patents/' . $savedPatent . '?msg="Patent succesfully registered');
+                        return $targetFile;
+                      }
+                      $patent = new Patent($company, $title, $file, $description, $date);
+                      $savedPatent = $this->patentRepository->save($patent);
+                      $this->app->redirect('/patents/' . $savedPatent . '?msg="Patent succesfully registered');
+                    }else {
+                      $this->app->flashNow('error', 'PDF files only');
+                      $this->app->render('patents/new.twig');
+                    }
                 }
+              }else {
+                $this->app->flashNow('error', join('<br>', $validation->getValidationErrors()));
+                $this->app->render('patents/new.twig');
+              }
             }
-          }else {
-            $this->app->flashNow('error', join('<br>', $validation->getValidationErrors()));
-            $this->app->render('patents/new.twig');
-          }
         }
-    }
 
 }

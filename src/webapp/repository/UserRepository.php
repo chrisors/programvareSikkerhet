@@ -122,6 +122,7 @@ class UserRepository
       $stmt->bindParam(':admin', $admin);
       return $stmt->execute();
     }
+
     public function saveExistingUser(User $user)
     {
       $stmt = $this->pdo->prepare(self::UPDATE_QUERY);
