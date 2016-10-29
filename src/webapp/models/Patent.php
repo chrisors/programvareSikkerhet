@@ -11,13 +11,13 @@ class Patent
     protected $description;
     protected $date;
 
-    function __construct($company, $title, $description, $date, $file)
+    function __construct($company, $title, $file, $description, $date)
     {
         $this->company = $company;
         $this->title = $title;
+        $this->file = $file;
         $this->description = $description;
         $this->date = $date;
-        $this->file = $file;
     }
 
     public function getPatentId() {
