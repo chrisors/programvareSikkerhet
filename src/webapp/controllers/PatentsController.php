@@ -44,7 +44,6 @@ class PatentsController extends Controller
       }else{
         $searchQuery = "";
       }
-//      $searchQuery = $this->patentRepository->searchPatents($company, $title);
 
       $this->render('patents/index.twig', [
           'patent' => $patent,
