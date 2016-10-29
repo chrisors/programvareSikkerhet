@@ -31,6 +31,28 @@ class PatentsController extends Controller
         $this->render('patents/index.twig', ['patent' => $patent, 'users' => $users]);
     }
 
+    public function search()
+    {
+      $request = $this->app->request;
+      $company = $request->post('patentsSearch');
+      $title = $company;
+      $patent = $this->patentRepository->all();
+      $users = $this->userRepository->all();
+      if (preg_match("/([A-Za-z0-9]+)/", $company))
+      {
+        $searchQuery = $this->patentRepository->searchPatents($company, $title);
+      }else{
+        $searchQuery = "";
+      }
+//      $searchQuery = $this->patentRepository->searchPatents($company, $title);
+
+      $this->render('patents/index.twig', [
+          'patent' => $patent,
+          'user' => $user,
+          'search' => $searchQuery
+      ]);
+    }
+
     public function show($patentId)
     {
         $patent = $this->patentRepository->find($patentId);
@@ -39,7 +61,6 @@ class PatentsController extends Controller
         $request = $this->app->request;
         $message = $request->get('msg');
         $variables = [];
-
 
         if($message) {
             $variables['msg'] = $message;
@@ -80,12 +101,13 @@ class PatentsController extends Controller
             $company     = $request->post('company');
             $date        = date("dmY");
 
+            $validation = new PatentValidation($company, $title, $description);
 
-  $validation = new PatentValidation($company, $title, $description);
           if ($validation->isGoodToGo()) {
 
             if(isset($_POST['submit']))
             {
+
               $target_dir =  getcwd()."/web/uploads/";
               $targetFile = $target_dir . basename($_FILES['uploaded']['name']);
               $ext = pathinfo($targetFile, PATHINFO_EXTENSION);

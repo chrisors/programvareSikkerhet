@@ -66,11 +66,11 @@ class UsersController extends Controller
 
         $validation = new RegistrationFormValidation($username, $password, $firstName, $lastName, $phone, $company);
 
-    //    if(!$this->token->validate($token)){
-    //      $this->app->flashNow('info', 'An error has occurred');
-    //      $this->render('users/new.twig', ['username' => $username]);
-    //      return;
-    //    }
+        if(!$this->token->validate($token)){
+          $this->app->flashNow('info', 'An error has occurred');
+          $this->render('users/new.twig', ['user' => $user]);
+          return;
+        }
 
         if ($validation->isGoodToGo()) {
             $password = $password;
@@ -110,7 +110,7 @@ class UsersController extends Controller
         $token      = $request->post('token');
 
         if(!$this->token->validate($token)){
-          $this->app->flashNow('info', 'An error has occured');
+          $this->app->flashNow('info', 'An error has occurred');
           return $this->render('users/edit.twig', ['user' => $user]);
         }
 
@@ -145,11 +145,5 @@ class UsersController extends Controller
         $this->render('users.twig', [
           'users' => $this->userRepository->all()
         ]);
-    }
-
-    public function destroy()
-    {
-      $this->auth->logout();
-      $this->app->redirect('/');
     }
 }

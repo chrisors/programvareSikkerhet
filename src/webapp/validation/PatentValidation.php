@@ -34,11 +34,11 @@ class PatentValidation {
             $this->validationErrors[] = "Description needed, can only contain letters and numbers";
         }
 
-        if(empty($title)) {
+        if(empty($title) or strlen($title) > 25) {
             $this->validationErrors[] = "Title needed";
         }
 
-        if(empty($company)) {
+        if(empty($company) or strlen($company) > 25) {
             $this->validationErrors[] = "Company/User needed";
 
         }
@@ -49,4 +49,5 @@ class PatentValidation {
 
         return $this->validationErrors;
     }
+
 }

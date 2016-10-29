@@ -52,8 +52,9 @@ class SessionsController extends Controller
             $this->userRepository->updateLoginAttempts($failed_logins, $first_failed_login, $user);
             $this->app->flashNow('error', "Incorrect user/pass for $user, $attempts_left attempts left");
           }
-          if ($this->auth->checkCredentials($user, $pass) && $this->token->validate($token)) {
+          if ($this->token->validate($token) and $this->auth->checkCredentials($user, $pass)) {
               //both username/password and token must match
+              session_regenerate_id();
               $_SESSION['user'] = $user;
           /*  setcookie("user", $user);
               setcookie("password",  $pass);
@@ -74,10 +75,10 @@ class SessionsController extends Controller
         $this->render('sessions/new.twig', []);
     }
 
-    //public function destroy()
-    // {
-      //  $this->auth->logout();
-      //  $this->app->redirect('/');
-//       $this->app->redirect('http://www.ntnu.no/');
-    //}
+    public function destroy()
+    {
+      session_regenerate_id();
+      $this->auth->logout();
+      $this->app->redirect('/');
+    }
 }

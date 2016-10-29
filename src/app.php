@@ -12,7 +12,7 @@ use tdt4237\webapp\repository\PatentRepository;
 require_once __DIR__ . '/../vendor/autoload.php';
 
 chdir(__DIR__ . '/../');
-chmod(__DIR__ . '/../web/uploads', 0777);
+chmod(__DIR__ . '/../web/uploads', 0700);
 
 $app = new Slim([
     'templates.path' => __DIR__.'/webapp/templates/',
@@ -57,7 +57,7 @@ $app->get('/login', $ns . 'SessionsController:newSession');
 $app->post('/login', $ns . 'SessionsController:create');
 
 // Logout
-$app->get('/logout', $ns . 'UsersController:destroy')->name('logout');
+$app->get('/logout', $ns . 'SessionsController:destroy')->name('logout');
 
 // User management
 $app->get('/users/new', $ns . 'UsersController:newuser')->name('newuser');
@@ -72,6 +72,7 @@ $app->post('/profile/edit', $ns . 'UsersController:update');
 
 // Patents
 $app->get('/patents', $ns . 'PatentsController:index')->name('showpatents');
+$app->post('/patents', $ns . 'PatentsController:search');
 $app->get('/patents/new', $ns . 'PatentsController:newpatent')->name('registerpatent');
 $app->post('/patents/new', $ns . 'PatentsController:create');
 $app->get('/patents/:patentId', $ns . 'PatentsController:show');
