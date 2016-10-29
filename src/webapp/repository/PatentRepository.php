@@ -14,7 +14,6 @@ class PatentRepository
     const FIND_PATENT = "SELECT * FROM patent WHERE patentId = :patentId";
     const DELETE_PATENT = "DELETE FROM patent WHERE patentid = :patentId";
 
-    //const INSERT_QUERY   = "INSERT INTO patent (company, title, description, date, file) VALUES('%s', '%s', '%s' , '%s' , '%s')";
     /**
      * @var PDO
      */
@@ -110,23 +109,19 @@ class PatentRepository
 
     public function save(Patent $patent)
     {
-      
-        $stmt = $this->pdo->prepare(self::SAVE_PATENT);
-        $company        = $patent->getCompany();
-        $title          = $patent->getTitle();
-        $file           = $patent->getFile();
-        $description    = $patent->getDescription();
-        $date           = $patent->getDate();
-
-
-        $stmt->bindParam(':company', $company);
-        $stmt->bindParam(':title', $title);
-        $stmt->bindParam(':file', $file);
-        $stmt->bindParam(':description' ,$description);
-        $stmt->bindParam(':date',$date);
-
-        $stmt->execute();
-        return $this->pdo->lastInsertId();
+      $stmt = $this->pdo->prepare(self::SAVE_PATENT);
+      $company        = $patent->getCompany();
+      $title          = $patent->getTitle();
+      $file           = $patent->getFile();
+      $description    = $patent->getDescription();
+      $date           = $patent->getDate();
+      $stmt->bindParam(':company', $company);
+      $stmt->bindParam(':title', $title);
+      $stmt->bindParam(':file', $file);
+      $stmt->bindParam(':description' ,$description);
+      $stmt->bindParam(':date',$date);
+      $stmt->execute();
+      return $this->pdo->lastInsertId();
 
     }
 }
