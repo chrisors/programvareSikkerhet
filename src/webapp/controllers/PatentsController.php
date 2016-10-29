@@ -115,14 +115,14 @@ class PatentsController extends Controller
                   if(move_uploaded_file($_FILES['uploaded']['tmp_name'], $targetFile))
                   {
 
-                    $patent = new Patent($company, $title, $description, $date, $file);
+                    $patent = new Patent($company, $title, $file, $description, $date);
                     $savedPatent = $this->patentRepository->save($patent);
                     $this->app->redirect('/patents/' . $savedPatent . '?msg="Patent succesfully registered');
                     return $targetFile;
 
                   }
 
-                  $patent = new Patent($company, $title, $description, $date, $file);
+                  $patent = new Patent($company, $title, $file, $description, $date);
                   $savedPatent = $this->patentRepository->save($patent);
                   $this->app->redirect('/patents/' . $savedPatent . '?msg="Patent succesfully registered');
                 }else {

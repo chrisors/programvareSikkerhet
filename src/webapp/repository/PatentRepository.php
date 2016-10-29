@@ -10,6 +10,7 @@ class PatentRepository
 {
     const SEARCH_COMPANY = "SELECT * FROM patent WHERE company='%s' OR title='%s'";
     const SELECT_ALL = "SELECT * FROM patent";
+    const SAVE_PATENT = "INSERT INTO patent(company, title, file, description, date) VALUES(:company, :title, :file, :description, :date)";
 
     /**
      * @var PDO
@@ -23,7 +24,7 @@ class PatentRepository
 
     public function makePatentFromRow(array $row)
     {
-        $patent = new Patent($row['patentId'], $row['company'], $row['title'], $row['description'], $row['date'], $row['file']);
+        $patent = new Patent($row['patentId'], $row['company'], $row['title'], $row['file'], $row['description'], $row['date']);
         $patent->setPatentId($row['patentId']);
         $patent->setCompany($row['company']);
         $patent->setTitle($row['title']);
@@ -90,18 +91,27 @@ class PatentRepository
 
     public function save(Patent $patent)
     {
-        $title          = $patent->getTitle();
+        $stmt = $this->pdo->prepare(self::SAVE_PATENT);
         $company        = $patent->getCompany();
+        $title          = $patent->getTitle();
+        $file           = $patent->getFile();
         $description    = $patent->getDescription();
         $date           = $patent->getDate();
-        $file           = $patent->getFile();
 
-        if ($patent->getPatentId() === null) {
+
+        $stmt->bindParam(':company', $company);
+        $stmt->bindParam(':title', $title);
+        $stmt->bindParam(':file', $file);
+        $stmt->bindParam(':description' ,$description);
+        $stmt->bindParam(':date',$date);
+
+/*        if ($patent->getPatentId() === null) {
             $query = "INSERT INTO patent (company, date, title, description, file) "
                 . "VALUES ('$company', '$date', '$title', '$description', '$file')";
-        }
+        }*/
 
-        $this->pdo->exec($query);
+//        $this->pdo->exec($query);
+        $stmt->execute();
         return $this->pdo->lastInsertId();
     }
 }

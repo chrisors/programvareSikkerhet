@@ -15,7 +15,7 @@ class UserRepository
     const FIND_BY_NAME = "SELECT * FROM users WHERE user=:user";
     const DELETE_BY_NAME = "DELETE FROM users WHERE user=:user";
     const SELECT_ALL = "SELECT * FROM users";
-    const UPDATE_LOGIN_ATTEMPTS = "UPDATE users SET failed_logins='%s', first_failed_login='%s' WHERE user='%s'";
+    const UPDATE_LOGIN_ATTEMPTS = "UPDATE users SET failed_logins=:failed_logins, first_failed_login=:first_failed_login WHERE user=:user";
     const READ_LOGIN_ATTEMPTS = "SELECT failed_logins FROM users WHERE user=:user";
     const READ_FIRST_FAILED_LOGIN = "SELECT first_failed_login FROM users WHERE user=:user";
 
@@ -144,15 +144,21 @@ class UserRepository
 
     public function updateLoginAttempts($failed_logins, $first_failed_login, $user)
     {
-      $sql = sprintf(self::UPDATE_LOGIN_ATTEMPTS, $failed_logins, $first_failed_login, $user);
+      $sql = (self::UPDATE_LOGIN_ATTEMPTS);
+
       $stmt = $this->pdo->prepare($sql);
-      return $stmt->execute();
+      $stmt->bindParam(':failed_logins', $failed_logins);
+      $stmt->bindParam(':first_failed_login', $first_failed_login);
+      $stmt->bindParam(':user', $user);
+
+      return  $stmt->execute();
     }
 
     public function readLoginAttempts($user)
     {
       $sql = sprintf(self::READ_LOGIN_ATTEMPTS);
       $stmt = $this->pdo->prepare($sql);
+      $stmt->bindParam(':user', $user);
       $stmt->execute(['user'=>$user]);
       return $stmt->fetchColumn();
     }
@@ -161,6 +167,7 @@ class UserRepository
     {
       $sql = sprintf(self::READ_FIRST_FAILED_LOGIN);
       $stmt = $this->pdo->prepare($sql);
+      $stmt->bindParam(':user', $user);
       $stmt->execute(['user'=>$user]);
       return $stmt->fetchColumn();
     }
