@@ -8,10 +8,12 @@ use tdt4237\webapp\models\PatentCollection;
 
 class PatentRepository
 {
-    const SEARCH_COMPANY = "SELECT * FROM patent WHERE company='%s' OR title='%s'";
+    const SEARCH_COMPANY = "SELECT * FROM patent WHERE company=:company OR title=:title";
     const SELECT_ALL = "SELECT * FROM patent";
+    const FIND_PATENT = "SELECT * FROM patent WHERE patentId = :patentId";
+    const DELETE_PATENT = "DELETE FROM patent WHERE patentid = :patentId";
 
-const INSERT_QUERY   = "INSERT INTO patent (company, title, description, date, file) VALUES('%s', '%s', '%s' , '%s' , '%s')";
+    //const INSERT_QUERY   = "INSERT INTO patent (company, title, description, date, file) VALUES('%s', '%s', '%s' , '%s' , '%s')";
     /**
      * @var PDO
      */
@@ -37,7 +39,7 @@ const INSERT_QUERY   = "INSERT INTO patent (company, title, description, date, f
 
     public function find($patentId)
     {
-        $sql  = "SELECT * FROM patent WHERE patentId = :patentId ";
+        $sql  = self::FIND_PATENT;
         $sqlp = array( ':patentId' => $patentId);
         try {
           $result = $this->pdo->prepare($sql);
@@ -56,9 +58,11 @@ const INSERT_QUERY   = "INSERT INTO patent (company, title, description, date, f
 
     public function searchPatents($company, $title)
     {
-      $query = sprintf(self::SEARCH_COMPANY, $company, $title);
-      $result = $this->pdo->query($query, PDO::FETCH_ASSOC);
-      $row = $result->fetchAll();
+      $stmt = $this->pdo->prepare(self::SEARCH_COMPANY);
+      $stmt->bindParam(':company', $company);
+      $stmt->bindParam(':title', $title);
+      $stmt->execute();
+      $row = $stmt->fetchAll();
 
       if ($row === false) {
           return false;
@@ -69,8 +73,8 @@ const INSERT_QUERY   = "INSERT INTO patent (company, title, description, date, f
 
     public function all()
     {
-        $sql   = self::SELECT_ALL;
-        $results = $this->pdo->query($sql);
+        $stmt   = self::SELECT_ALL;
+        $results = $this->pdo->query($stmt);
 
         if($results === false) {
             return [];
@@ -89,7 +93,7 @@ const INSERT_QUERY   = "INSERT INTO patent (company, title, description, date, f
 
     public function deleteByPatentid($patentId)
     {
-      $sql = "DELETE FROM patent WHERE patentid= :patentId ";
+      $stmt = $this->pdo->prepare(self::DELETE_PATENT);
       $sqlp = array( ':patentId' => $patentId);
         try {
           $result = $this->pdo->prepare($sql);
@@ -105,8 +109,8 @@ const INSERT_QUERY   = "INSERT INTO patent (company, title, description, date, f
 
     public function save(Patent $patent)
     {
-      $company        = $patent->getCompany();
-       $title          = $patent->getTitle();
+        $company        = $patent->getCompany();
+        $title          = $patent->getTitle();
         $description    = $patent->getDescription();
         $date           = $patent->getDate();
         $file           = $patent->getFile();
@@ -116,7 +120,7 @@ const INSERT_QUERY   = "INSERT INTO patent (company, title, description, date, f
           //$sqlp = array( ':company' => $patent->getCompany(), ':title' => $patent->getTitle(), ':description' => $patent->getDescription(), ':date' => $patent->getDate(), ':file' => $patent->getFile());
 
           if ($patent->getPatentId() === null) {
-            $query = "INSERT INTO patent (company, date, title, description, file) "
+            $sql = "INSERT INTO patent (company, date, title, description, file) "
           . "VALUES ('$company', '$date', '$title', '$description', '$file')";
 
             //  $query = sprintf(
@@ -126,9 +130,7 @@ const INSERT_QUERY   = "INSERT INTO patent (company, title, description, date, f
                   //    return $this->pdo->exec($query);
 
           }
-          $this->pdo->exec($query);
+          $this->pdo->exec($sql);
               return $this->pdo->lastInsertId();
-
-
     }
 }
