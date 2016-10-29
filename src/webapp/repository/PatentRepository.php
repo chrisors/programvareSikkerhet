@@ -93,7 +93,7 @@ class PatentRepository
 
     public function deleteByPatentid($patentId)
     {
-      $stmt = $this->pdo->prepare(self::DELETE_PATENT);
+      $sql = self::DELETE_PATENT;
       $sqlp = array( ':patentId' => $patentId);
         try {
           $result = $this->pdo->prepare($sql);
